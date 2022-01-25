@@ -1,5 +1,6 @@
 package com.daelim.witty.domain;
 
+import com.daelim.witty.web.controller.dto.UserSignUpDTO;
 import lombok.Getter;
 
 @Getter
@@ -11,10 +12,10 @@ public class User {
     private String department;
 
     // TODO 이거 지워야함! 임시 데이터 테스트용
-    public User() {
-        this.id = "test2";
-        this.password = "test2";
-        this.email = "test2@email.daelim.ac.kr";
-        this.department = "컴퓨터정보학부";
+    public User(UserSignUpDTO userSignUpDTO) {
+        this.id = userSignUpDTO.getUser_id();
+        this.password = userSignUpDTO.getPassword();
+        this.email = userSignUpDTO.getUser_email();
+        this.department = userSignUpDTO.getUser_department();
     }
 }
