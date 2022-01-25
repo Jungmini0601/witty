@@ -37,6 +37,9 @@ public class UserController {
         }
     }
 
+    /**
+     *  로그인
+     * */
     @PostMapping("/login")
     public HashMap<String, String> login(@RequestBody UserLogInDTO userLogInDTO, HttpServletRequest request) {
         User user = userService.login(userLogInDTO);
@@ -51,6 +54,24 @@ public class UserController {
             HttpSession session = request.getSession();
             session.setAttribute(SessionConst.LOGIN_USER, user);
         }
+
+        return resultMap;
+    }
+
+
+    /**
+     *  로그아웃
+     * */
+    @PostMapping("/logout")
+    public HashMap<String, String> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+
+        HashMap<String, String> resultMap = new HashMap<>();
+        resultMap.put("result", "success");
 
         return resultMap;
     }
