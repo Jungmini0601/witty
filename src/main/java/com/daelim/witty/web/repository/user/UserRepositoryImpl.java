@@ -28,9 +28,9 @@ public class UserRepositoryImpl implements UserRepository{
 
         Map<String, Object> params = new HashMap<>();
         params.put("user_id", user.getId());
-        params.put("user_email", user.getId());
-        params.put("user_department", user.getId());
-        params.put("user_password", user.getId());
+        params.put("user_email", user.getEmail());
+        params.put("user_department", user.getDepartment());
+        params.put("user_password", user.getPassword());
 
         try {
             jdbcInsert.execute(params);
