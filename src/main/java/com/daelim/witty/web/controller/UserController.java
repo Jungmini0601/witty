@@ -26,10 +26,6 @@ public class UserController {
     /**
      *  회원가입
      *  담당자 : 김진솔
-     *  오성민 : test
-     *  ㅁㄴㅇㄻㄴㅇㄻㄴㅇㄻㄴㅇㄻㄴㅇㄹㄴㅁㅇㄹ
-     *  dkdpdldkddkjasldkflkasdjfoiwjo12312312312312312412512
-     *  음 어쩌구저쩌구 기능 추가가ㅁㄴ옮넝로ㅓ
     * */
     @PostMapping
     public String signUp(@RequestBody UserSignUpDTO userSignUpDTO) {
