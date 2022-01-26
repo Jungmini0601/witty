@@ -4,6 +4,7 @@ import com.daelim.witty.domain.User;
 import com.daelim.witty.web.SessionConst;
 import com.daelim.witty.web.controller.dto.UserLogInDTO;
 import com.daelim.witty.web.controller.dto.UserSignUpDTO;
+import com.daelim.witty.web.repository.user.UserRepository;
 import com.daelim.witty.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Slf4j
 @RequestMapping("/users")

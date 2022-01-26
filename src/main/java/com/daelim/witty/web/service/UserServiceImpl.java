@@ -6,8 +6,6 @@ import com.daelim.witty.web.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService{
