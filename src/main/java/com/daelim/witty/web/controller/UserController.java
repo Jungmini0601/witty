@@ -25,6 +25,7 @@ public class UserController {
 
     /**
      *  회원가입
+     *  담당자 : 김진솔
      * */
     @PostMapping
     public String signUp(@RequestBody UserSignUpDTO userSignUpDTO) {
