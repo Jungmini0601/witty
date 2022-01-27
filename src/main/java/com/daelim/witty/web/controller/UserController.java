@@ -39,7 +39,6 @@ public class UserController {
             return "success";
         }
     }
-
     /**
      *  로그인
      * */
