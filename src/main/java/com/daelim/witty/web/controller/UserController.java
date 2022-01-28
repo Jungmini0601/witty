@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -33,8 +34,8 @@ public class UserController {
     *  회원가입
      *  담당자 : 김진솔
     * */
-    @PostMapping("/signUp")
-    public String signUp(@RequestBody @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult ) {
+    @PostMapping
+    public String signUp(@RequestBody @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult) {
         User user = new User(userSignUpDTO);
 
         boolean ret = userService.signUp(user);
@@ -66,6 +67,42 @@ public class UserController {
         //return 값 ??
         return null;
     }
+
+    /**
+     * 아이디중복체크
+     * 오성민
+     */
+    @PostMapping("/id_check")
+    public int id_check(@RequestBody UserSignUpDTO userSignUpDTO) {
+        User user = new User(userSignUpDTO);
+        int result = 0; //result 값이 0이면 중복, 1이면 중복x
+        if(user.getId() == ""){
+            result = 0;
+            log.info("아이디 값을 확인해주세요.");
+            return result;
+        }
+        /*else if(user.getId() == "mysql에 저장된값하고 비교?"){
+            log.info("아이디가 이미 존재합니다.");
+            result = 0;
+            return result;
+         }*/
+       /* else {
+            log.info("아이디 중복 체크 완료");
+            result = 1;
+            return result;
+        }*/
+        return result;
+    }
+    /* main 밑에 resources 밑에 userMapper.xml 추가
+     <?xml version="1.0" encoding="UTF-8"?>
+     <mapper namespace="User">
+        <!-- 아이디 확인 -->
+        <select id="idCheck" resultType="string">
+            select user_id from witty_user = #{user_id}
+        </select>
+     </mapper>
+    */
+
 
     /**
      *  로그인
