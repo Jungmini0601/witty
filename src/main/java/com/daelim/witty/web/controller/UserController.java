@@ -10,12 +10,14 @@ import com.daelim.witty.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -31,17 +33,38 @@ public class UserController {
      *  회원가입
      *  담당자 : 김진솔
     * */
-    @PostMapping
-    public String signUp(@RequestBody UserSignUpDTO userSignUpDTO) {
+    @PostMapping("/signUp")
+    public String signUp(@RequestBody @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult ) {
         User user = new User(userSignUpDTO);
 
         boolean ret = userService.signUp(user);
 
         if(!ret){
-            return "error 발생!";
+            /**
+             * false
+             * result : "입력값 확인 필요"
+             */
+            //bindingResult.addError(new FieldError("user","userSignUpDTO","회원가입 오류"));
+            if (bindingResult.hasErrors()){
+                log.info(bindingResult.toString());
+                throw new BadRequestException("입력값 확인 필요");
+                //return "signUp";
+            }
         }else{
-            return "success";
+            /**
+             * true
+             * 가입된 유저 정보
+             * "user":{
+             *     "user_id":
+             *     "user_email":
+             *     "user_department":
+             * */
+            //log로 뿌려주면 어떻게 되지??
+            log.info(user.toString());
+            return "redirect:/login";
         }
+        //return 값 ??
+        return null;
     }
 
     /**
