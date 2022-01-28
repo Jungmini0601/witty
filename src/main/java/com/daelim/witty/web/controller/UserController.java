@@ -2,6 +2,7 @@ package com.daelim.witty.web.controller;
 
 import com.daelim.witty.domain.User;
 import com.daelim.witty.web.SessionConst;
+import com.daelim.witty.web.controller.dto.SendVerificationCodeDTO;
 import com.daelim.witty.web.controller.dto.UserIdCheckDTO;
 import com.daelim.witty.web.controller.dto.UserLogInDTO;
 import com.daelim.witty.web.controller.dto.UserSignUpDTO;
@@ -20,11 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @RequestMapping("/users")
@@ -113,14 +110,19 @@ public class UserController {
     *  클라이언트에 이메일 인증번호까지 같이 전송한 후 클라이언트에서 확인 하도록 한다.
     *  김정민
     * */
-    @PostMapping("/sendVerificationCode")   // TODO 이메일에 값 제대로 안들어옴
-    public HashMap<String, Object> sendVerificationCode(@RequestBody String email) throws Exception {
+    @PostMapping("/sendVerificationCode")
+    public HashMap<String, Object> sendVerificationCode(@RequestBody SendVerificationCodeDTO sendVerificationCodeDTO) {
         HashMap<String, Object> response = new HashMap<>();
 
+        //렌덤
+        Random rd = new Random(System.currentTimeMillis());
+        int rdcord = 111111 + rd.nextInt(888888);
+
         String subject = "test 메일";
-        String content = "김정민 슈퍼미남 짱짱맨";
+        String content = "인증번호 입니다" + rdcord + " 앙 기모띠";
         String from = "jungmini0601@gmail.com";
-        String to = "aphopis@naver.com";
+        String to = sendVerificationCodeDTO.getEmail();
+
 
         try {
             MimeMessage mail = mailSender.createMimeMessage();
