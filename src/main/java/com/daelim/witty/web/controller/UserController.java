@@ -9,11 +9,14 @@ import com.daelim.witty.web.repository.user.UserRepository;
 import com.daelim.witty.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -29,7 +32,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-
+    private final JavaMailSender mailSender;
     /** TODO 수정 필요
     *  회원가입
      *  담당자 : 김진솔
@@ -103,6 +106,40 @@ public class UserController {
      </mapper>
     */
 
+    /*
+    *  이메일 전송
+    *  김정민
+    * */
+    @PostMapping("/sendVerificationCode")
+    public HashMap<String, Object> sendVerificationCode(@RequestBody String email) {
+        HashMap<String, Object> response = new HashMap<>();
+
+        String subject = "test 메일";
+        String content = "메일 테스트 내용";
+        String from = "jungmini0601@gmail.com";
+
+
+        try {
+            MimeMessage mail = mailSender.createMimeMessage();
+            MimeMessageHelper mailHelper = new MimeMessageHelper(mail, true, "UTF-8");
+            // true 는 멀티 파트 메세지를 사용 하겠다는 의미
+
+            mailHelper.setFrom(from);
+            mailHelper.setTo(email);
+            mailHelper.setSubject(subject);
+            mailHelper.setText(content, true);
+            // true는 html 을 사용 하겠다는 의미
+            mailSender.send(mail);
+        }catch (Exception e) {
+
+            response.put("result", "메일전송 실패");
+            return response;
+        }
+
+        response.put("result", "성공");
+
+        return response;
+    }
 
     /**
      *  로그인
@@ -142,7 +179,6 @@ public class UserController {
 
         return resultMap;
     }
-
 
     /**
      *  로그아웃

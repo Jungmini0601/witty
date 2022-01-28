@@ -1,4 +1,4 @@
-package com.daelim.witty;
+package com.daelim.witty.config;
 
 import com.daelim.witty.web.argumentResolver.LoginMemberArgumentResolver;
 import org.springframework.context.annotation.Configuration;
