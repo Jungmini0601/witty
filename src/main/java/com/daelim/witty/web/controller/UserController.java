@@ -29,8 +29,8 @@ public class UserController {
 
     private final UserService userService;
 
-    /**
-     *  회원가입
+    /** TODO 수정 필요
+    *  회원가입
      *  담당자 : 김진솔
     * */
     @PostMapping("/signUp")
