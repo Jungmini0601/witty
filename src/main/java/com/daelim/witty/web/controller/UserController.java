@@ -41,7 +41,6 @@ public class UserController {
     public HashMap<String, Object> signUp(@RequestBody @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult) throws Exception {
         // 입력값이 잘못 들어온 경우
         if (bindingResult.hasErrors()){
-            log.info(bindingResult.toString());
             throw new BadRequestException("입력값 확인 필요");
         }
 
@@ -51,7 +50,6 @@ public class UserController {
         boolean ret = userService.signUp(user);
 
         HashMap<String, Object> response = new HashMap<>();
-
 
         if(!ret) {
             response.put("result", "서버 에러");
@@ -85,8 +83,6 @@ public class UserController {
 
         return 0;
     }
-
-
 
     /*
     *  이메일 전송
