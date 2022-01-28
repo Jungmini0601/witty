@@ -33,42 +33,43 @@ public class UserController {
 
     private final UserService userService;
     private final JavaMailSender mailSender;
-    /** TODO 수정 필요
+    /**
     *  회원가입
-     *  담당자 : 김진솔
+    *  담당자 : 김진솔
     * */
     @PostMapping
-    public String signUp(@RequestBody @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult) {
+    public HashMap<String, Object> signUp(@RequestBody @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult) throws Exception {
+        // 입력값이 잘못 들어온 경우
+        if (bindingResult.hasErrors()){
+            log.info(bindingResult.toString());
+            throw new BadRequestException("입력값 확인 필요");
+        }
+
+        //입력값이 제대로 들어 왔으니까 저장을하면 되잖아?
         User user = new User(userSignUpDTO);
 
         boolean ret = userService.signUp(user);
 
-        if(!ret){
-            /**
-             * false
-             * result : "입력값 확인 필요"
-             */
-            //bindingResult.addError(new FieldError("user","userSignUpDTO","회원가입 오류"));
-            if (bindingResult.hasErrors()){
-                log.info(bindingResult.toString());
-                throw new BadRequestException("입력값 확인 필요");
-                //return "signUp";
-            }
-        }else{
-            /**
-             * true
-             * 가입된 유저 정보
-             * "user":{
-             *     "user_id":
-             *     "user_email":
-             *     "user_department":
-             * */
-            //log로 뿌려주면 어떻게 되지??
-            log.info(user.toString());
-            return "redirect:/login";
+        HashMap<String, Object> response = new HashMap<>();
+
+
+        if(!ret) {
+            response.put("result", "서버 에러");
+            return response;
         }
-        //return 값 ??
-        return null;
+
+        // 성공
+        response.put("result", "성공");
+
+        HashMap<String, Object> userResponse = new HashMap<>();
+        userResponse.put("user_id", user.getId());
+        userResponse.put("user_email", user.getEmail());
+        userResponse.put("user_department", user.getDepartment());
+
+        response.put("user", userResponse);
+
+
+        return response;
     }
 
     /**
@@ -76,48 +77,30 @@ public class UserController {
      * 오성민
      */
     @PostMapping("/id_check")
-    public int id_check(@RequestBody UserSignUpDTO userSignUpDTO) {
-        User user = new User(userSignUpDTO);
-        int result = 0; //result 값이 0이면 중복, 1이면 중복x
-        if(user.getId() == ""){
-            result = 0;
-            log.info("아이디 값을 확인해주세요.");
-            return result;
-        }
-        /*else if(user.getId() == "mysql에 저장된값하고 비교?"){
-            log.info("아이디가 이미 존재합니다.");
-            result = 0;
-            return result;
-         }*/
-       /* else {
-            log.info("아이디 중복 체크 완료");
-            result = 1;
-            return result;
-        }*/
-        return result;
+    public int id_check(@RequestBody String id) {
+
+        boolean ret = userService.isDuplicatedId(id);
+
+        // TODO ret의 결과 값에 따라서 값 반환
+
+        return 0;
     }
-    /* main 밑에 resources 밑에 userMapper.xml 추가
-     <?xml version="1.0" encoding="UTF-8"?>
-     <mapper namespace="User">
-        <!-- 아이디 확인 -->
-        <select id="idCheck" resultType="string">
-            select user_id from witty_user = #{user_id}
-        </select>
-     </mapper>
-    */
+
+
 
     /*
     *  이메일 전송
+    *  클라이언트에 이메일 인증번호까지 같이 전송한 후 클라이언트에서 확인 하도록 한다.
     *  김정민
     * */
-    @PostMapping("/sendVerificationCode")
+    @PostMapping("/sendVerificationCode")   // TODO 이메일에 값 제대로 안들어옴
     public HashMap<String, Object> sendVerificationCode(@RequestBody String email) {
         HashMap<String, Object> response = new HashMap<>();
 
         String subject = "test 메일";
-        String content = "메일 테스트 내용";
+        String content = "김정민 슈퍼미남 짱짱맨";
         String from = "jungmini0601@gmail.com";
-
+        String to = "aphopis@naver.com";
 
         try {
             MimeMessage mail = mailSender.createMimeMessage();
@@ -125,11 +108,13 @@ public class UserController {
             // true 는 멀티 파트 메세지를 사용 하겠다는 의미
 
             mailHelper.setFrom(from);
-            mailHelper.setTo(email);
+            mailHelper.setTo(to);
             mailHelper.setSubject(subject);
             mailHelper.setText(content, true);
             // true는 html 을 사용 하겠다는 의미
+
             mailSender.send(mail);
+
         }catch (Exception e) {
 
             response.put("result", "메일전송 실패");
