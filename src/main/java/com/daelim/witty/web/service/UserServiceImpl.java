@@ -6,6 +6,8 @@ import com.daelim.witty.web.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService{
@@ -22,5 +24,12 @@ public class UserServiceImpl implements UserService{
         return userRepository.findById(userLogInDTO.getUser_id())
                 .filter(user -> user.getPassword().equals(userLogInDTO.getPassword()))
                 .orElse(null);
+    }
+
+    @Override
+    public boolean isDuplicatedId(String id) {
+        Optional<User> user = userRepository.findById(id);
+
+        return user.isPresent();
     }
 }

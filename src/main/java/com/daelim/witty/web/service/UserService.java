@@ -13,4 +13,6 @@ public interface UserService {
      *  로그인
      * */
     public User login(UserLogInDTO userLogInDTO);
+
+    public boolean isDuplicatedId(String id);
 }
