@@ -2,6 +2,7 @@ package com.daelim.witty.web.controller;
 
 import com.daelim.witty.domain.User;
 import com.daelim.witty.web.SessionConst;
+import com.daelim.witty.web.controller.dto.UserIdCheckDTO;
 import com.daelim.witty.web.controller.dto.UserLogInDTO;
 import com.daelim.witty.web.controller.dto.UserSignUpDTO;
 import com.daelim.witty.web.exception.BadRequestException;
@@ -77,13 +78,36 @@ public class UserController {
      * 오성민
      */
     @PostMapping("/id_check")
-    public int id_check(@RequestBody String id) {
+    public HashMap<String, Object> id_check(@RequestBody @Validated UserIdCheckDTO userIdCheckDTO, BindingResult bindingResult) {
+        HashMap<String, Object> response = new HashMap<>();
 
-        boolean ret = userService.isDuplicatedId(id);
+        if (bindingResult.hasErrors()){
+            log.info(bindingResult.toString());
+            throw new BadRequestException("입력값 확인 필요");
+        }
 
+        log.info(userIdCheckDTO.getUser_id());
+
+        boolean ret = userService.isDuplicatedId(userIdCheckDTO.getUser_id());
+
+
+        log.info(ret + "");
         // TODO ret의 결과 값에 따라서 값 반환
+        if(!ret) {
+            response.put("result", "아이디 중복 체크 완료");
+            response.put("user_id", userIdCheckDTO.getUser_id());
 
-        return 0;
+            return response;
+        }
+
+
+        response.put("result", "아이디가 이미 존재합니다");
+        response.put("user_id", userIdCheckDTO.getUser_id());
+
+        return response;
+
+
+
     }
 
 
@@ -94,7 +118,7 @@ public class UserController {
     *  김정민
     * */
     @PostMapping("/sendVerificationCode")   // TODO 이메일에 값 제대로 안들어옴
-    public HashMap<String, Object> sendVerificationCode(@RequestBody String email) {
+    public HashMap<String, Object> sendVerificationCode(@RequestBody String email) throws Exception {
         HashMap<String, Object> response = new HashMap<>();
 
         String subject = "test 메일";
