@@ -15,7 +15,6 @@ public class ExControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
     public ErrorResult badRequestExHandler(BadRequestException e) {
-
         return new ErrorResult(e.getMessage());
     }
 
@@ -29,5 +28,11 @@ public class ExControllerAdvice {
     @ExceptionHandler(ForbbiddenException.class)
     public ErrorResult forbiddenExHandler(ForbbiddenException e) {
         return new ErrorResult(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public ErrorResult internalServerError(Exception e) {
+        return new ErrorResult("식별되지 않은 에러 개발자 연락 요망");
     }
 }

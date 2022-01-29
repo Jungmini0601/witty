@@ -14,8 +14,6 @@ public class TestController {
     @GetMapping("/test")
     public String test(@Login User user) {
 
-        log.info("****로그인된 유저**** : {}"  , user);
-
         return "ok";
     }
 }

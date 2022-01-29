@@ -77,7 +77,6 @@ public class UserController {
         HashMap<String, Object> response = new HashMap<>();
 
         if (bindingResult.hasErrors()){
-            log.info(bindingResult.toString());
             throw new BadRequestException("입력값 확인 필요");
         }
 
@@ -85,9 +84,6 @@ public class UserController {
 
         boolean ret = userService.isDuplicatedId(userIdCheckDTO.getUser_id());
 
-
-        log.info(ret + "");
-        // TODO ret의 결과 값에 따라서 값 반환
         if(!ret) {
             response.put("result", "아이디 중복 체크 완료");
             response.put("user_id", userIdCheckDTO.getUser_id());
@@ -100,9 +96,6 @@ public class UserController {
         response.put("user_id", userIdCheckDTO.getUser_id());
 
         return response;
-
-
-
     }
 
     /*
@@ -150,13 +143,12 @@ public class UserController {
 
     /**
      *  로그인
-     * @Author: 김정민
+     *  김정민
      * */
     @PostMapping("/login")
     public HashMap<String, Object> login(@RequestBody @Validated UserLogInDTO userLogInDTO, BindingResult bindingResult, HttpServletRequest request) {
 
         if(bindingResult.hasErrors()){
-            log.info(bindingResult.toString());
             throw new BadRequestException("입력값 확인 필요");
         }
 
