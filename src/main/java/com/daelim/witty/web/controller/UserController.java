@@ -1,11 +1,9 @@
 package com.daelim.witty.web.controller;
 
+import com.daelim.witty.domain.EmailConfrim;
 import com.daelim.witty.domain.User;
 import com.daelim.witty.web.SessionConst;
-import com.daelim.witty.web.controller.dto.SendVerificationCodeDTO;
-import com.daelim.witty.web.controller.dto.UserIdCheckDTO;
-import com.daelim.witty.web.controller.dto.UserLogInDTO;
-import com.daelim.witty.web.controller.dto.UserSignUpDTO;
+import com.daelim.witty.web.controller.dto.*;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.repository.user.UserRepository;
 import com.daelim.witty.web.service.UserService;
@@ -30,7 +28,7 @@ import java.util.*;
 public class UserController {
 
     private final UserService userService;
-    private final JavaMailSender mailSender;
+
     /**
     *  회원가입
     *  담당자 : 김진솔
@@ -98,45 +96,43 @@ public class UserController {
         return response;
     }
 
-    /*
+    /**
     *  이메일 전송
     *  클라이언트에 이메일 인증번호까지 같이 전송한 후 클라이언트에서 확인 하도록 한다.
     *  김정민
-    * */
-    @PostMapping("/sendVerificationCode")
-    public HashMap<String, Object> sendVerificationCode(@RequestBody SendVerificationCodeDTO sendVerificationCodeDTO) {
+    */
+    @PostMapping("/sendEmail")
+    public HashMap<String, Object> sendVerificationCode(@RequestBody SendVerificationCodeDTO sendVerificationCodeDTO) throws Exception{
         HashMap<String, Object> response = new HashMap<>();
 
-        //렌덤
-        Random rd = new Random(System.currentTimeMillis());
-        int rdcord = 111111 + rd.nextInt(888888);
-
-        String subject = "test 메일";
-        String content = "인증번호 입니다" + rdcord + " 앙 기모띠";
-        String from = "jungmini0601@gmail.com";
-        String to = sendVerificationCodeDTO.getEmail();
-
+        EmailConfrim emailConfrim = new EmailConfrim();
+        emailConfrim.setEmail(sendVerificationCodeDTO.getEmail());
 
         try {
-            MimeMessage mail = mailSender.createMimeMessage();
-            MimeMessageHelper mailHelper = new MimeMessageHelper(mail, true, "UTF-8");
-            // true 는 멀티 파트 메세지를 사용 하겠다는 의미
-
-            mailHelper.setFrom(from);
-            mailHelper.setTo(to);
-            mailHelper.setSubject(subject);
-            mailHelper.setText(content, true);
-            // true는 html 을 사용 하겠다는 의미
-
-            mailSender.send(mail);
-
+            userService.emailConfirm(emailConfrim);
         }catch (Exception e) {
-
-            response.put("result", "메일전송 실패");
-            return response;
+            log.error(e.getMessage());
+            throw e;
         }
 
         response.put("result", "성공");
+        response.put("email", emailConfrim.getEmail());
+
+        return response;
+    }
+
+    // TODO 에러처리 및 리팩토링 좀 필요함 기능은 개발 완료
+    @PostMapping("/verification")
+    public HashMap<String, Object> verification(@RequestBody VerificationCodeDTO verificationCodeDTO) throws Exception {
+        boolean ret = userService.verification(verificationCodeDTO); // 여기 인터
+
+        HashMap<String, Object> response = new HashMap<>();
+
+        if(ret) {
+            response.put("result", "성공");
+        }else {
+            response.put("result", "인증번호를 확인 해 주세요");
+        }
 
         return response;
     }

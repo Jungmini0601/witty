@@ -33,6 +33,6 @@ public class ExControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ErrorResult internalServerError(Exception e) {
-        return new ErrorResult("식별되지 않은 에러 개발자 연락 요망");
+        return new ErrorResult(e.getMessage());
     }
 }
