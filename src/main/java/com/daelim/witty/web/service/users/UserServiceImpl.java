@@ -1,19 +1,16 @@
-package com.daelim.witty.web.service;
+package com.daelim.witty.web.service.users;
 
 import com.daelim.witty.domain.EmailConfrim;
 import com.daelim.witty.domain.User;
-import com.daelim.witty.web.controller.dto.UserLogInDTO;
-import com.daelim.witty.web.controller.dto.VerificationCodeDTO;
-import com.daelim.witty.web.repository.user.EmailConfirmRepository;
-import com.daelim.witty.web.repository.user.UserRepository;
+import com.daelim.witty.web.controller.dto.users.UserLogInDTO;
+import com.daelim.witty.web.controller.dto.users.VerificationCodeDTO;
+import com.daelim.witty.web.exception.BadRequestException;
+import com.daelim.witty.web.repository.users.EmailConfirmRepository;
+import com.daelim.witty.web.repository.users.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.mail.internet.MimeMessage;
 import java.util.Optional;
-import java.util.Random;
 
 @RequiredArgsConstructor
 @Service
@@ -48,11 +45,16 @@ public class UserServiceImpl implements UserService{
            mailService.sendMail(emailConfrim);
     }
 
-    //TODO 여기 인터페이스 수정하고 개발 다시해야 함
     @Override
     public boolean verification(VerificationCodeDTO verificationCodeDTO) {
 
-        EmailConfrim emailConfrim = emailConfirmRepository.findByEmail(verificationCodeDTO.getEmail()).get();
+        Optional<EmailConfrim> emailConfirmOptional = emailConfirmRepository.findByEmail(verificationCodeDTO.getEmail());
+
+        if(emailConfirmOptional.isEmpty()) {
+            throw new BadRequestException("인증번호 요청을 먼저 해 주어야 합니다.");
+        }
+
+        EmailConfrim emailConfrim = emailConfirmOptional.get();
 
         return verificationCodeDTO.getKey().equals(emailConfrim.getKey());
     }

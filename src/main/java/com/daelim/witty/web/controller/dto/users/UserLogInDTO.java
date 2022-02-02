@@ -1,5 +1,6 @@
-package com.daelim.witty.web.controller.dto;
+package com.daelim.witty.web.controller.dto.users;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -7,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
-@Getter @Setter
+@Data
 public class UserLogInDTO {
 
     @Length(min = 1, max = 100)

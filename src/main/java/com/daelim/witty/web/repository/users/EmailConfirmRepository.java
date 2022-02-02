@@ -1,4 +1,4 @@
-package com.daelim.witty.web.repository.user;
+package com.daelim.witty.web.repository.users;
 
 import com.daelim.witty.domain.EmailConfrim;
 

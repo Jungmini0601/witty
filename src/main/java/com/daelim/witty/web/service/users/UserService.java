@@ -1,10 +1,9 @@
-package com.daelim.witty.web.service;
+package com.daelim.witty.web.service.users;
 
 import com.daelim.witty.domain.EmailConfrim;
 import com.daelim.witty.domain.User;
-import com.daelim.witty.web.controller.dto.UserLogInDTO;
-import com.daelim.witty.web.controller.dto.VerificationCodeDTO;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.daelim.witty.web.controller.dto.users.UserLogInDTO;
+import com.daelim.witty.web.controller.dto.users.VerificationCodeDTO;
 
 public interface UserService {
     /**

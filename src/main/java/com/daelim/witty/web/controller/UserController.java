@@ -3,20 +3,16 @@ package com.daelim.witty.web.controller;
 import com.daelim.witty.domain.EmailConfrim;
 import com.daelim.witty.domain.User;
 import com.daelim.witty.web.SessionConst;
-import com.daelim.witty.web.controller.dto.*;
+import com.daelim.witty.web.argumentResolver.Login;
+import com.daelim.witty.web.controller.dto.users.*;
 import com.daelim.witty.web.exception.BadRequestException;
-import com.daelim.witty.web.repository.user.UserRepository;
-import com.daelim.witty.web.service.UserService;
+import com.daelim.witty.web.service.users.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -98,8 +94,8 @@ public class UserController {
 
     /**
     *  이메일 전송
-    *  클라이언트에 이메일 인증번호까지 같이 전송한 후 클라이언트에서 확인 하도록 한다.
-    *  김정민
+    *  인증번호를 이메일로 전송한다
+    *  작성자: 김정민
     */
     @PostMapping("/sendEmail")
     public HashMap<String, Object> sendVerificationCode(@RequestBody SendVerificationCodeDTO sendVerificationCodeDTO) throws Exception{
@@ -121,18 +117,22 @@ public class UserController {
         return response;
     }
 
-    // TODO 에러처리 및 리팩토링 좀 필요함 기능은 개발 완료
+    /**
+     * 인증번호 확인
+     * 작성자: 김정민
+     * */
     @PostMapping("/verification")
-    public HashMap<String, Object> verification(@RequestBody VerificationCodeDTO verificationCodeDTO) throws Exception {
+    public HashMap<String, Object> verification(@RequestBody VerificationCodeDTO verificationCodeDTO, BindingResult bindingResult) throws Exception {
+        if(bindingResult.hasErrors()) {
+            throw new BadRequestException("입력값 확인 필요");
+        }
+
         boolean ret = userService.verification(verificationCodeDTO); // 여기 인터
 
         HashMap<String, Object> response = new HashMap<>();
 
-        if(ret) {
-            response.put("result", "성공");
-        }else {
-            response.put("result", "인증번호를 확인 해 주세요");
-        }
+        if(ret) response.put("result", "성공");
+        else    response.put("result", "인증번호를 확인 해 주세요");
 
         return response;
     }
@@ -190,5 +190,29 @@ public class UserController {
         resultMap.put("result", "성공");
 
         return resultMap;
+    }
+
+    /**인증 확인
+     * 김정민
+     * */
+    @GetMapping("/auth")
+    public HashMap<String, Object> auth(@Login User user) {
+        HashMap<String, Object> response = new HashMap<>();
+
+        if(user == null) {
+            response.put("result", "로그인 되지 않은 유저");
+            return response;
+        }
+
+        response.put("result", "성공");
+
+        HashMap<String, Object> userResponse = new HashMap<>();
+        userResponse.put("user_id", user.getId());
+        userResponse.put("user_email", user.getEmail());
+        userResponse.put("user_department", user.getDepartment());
+
+        response.put("user", userResponse);
+
+        return response;
     }
 }

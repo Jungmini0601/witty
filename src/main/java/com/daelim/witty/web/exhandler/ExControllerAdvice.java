@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
 @Slf4j
 @RestControllerAdvice(basePackages = "com.daelim.witty.web.controller")
 public class ExControllerAdvice {
@@ -28,6 +30,12 @@ public class ExControllerAdvice {
     @ExceptionHandler(ForbbiddenException.class)
     public ErrorResult forbiddenExHandler(ForbbiddenException e) {
         return new ErrorResult(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ErrorResult methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        return new ErrorResult("path 경로 값이 잘못 되었습니다");
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

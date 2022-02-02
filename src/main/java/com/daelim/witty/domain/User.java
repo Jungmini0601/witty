@@ -1,6 +1,6 @@
 package com.daelim.witty.domain;
 
-import com.daelim.witty.web.controller.dto.UserSignUpDTO;
+import com.daelim.witty.web.controller.dto.users.UserSignUpDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
