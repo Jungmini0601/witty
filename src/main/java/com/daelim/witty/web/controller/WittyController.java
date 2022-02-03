@@ -11,6 +11,7 @@ import com.daelim.witty.web.service.wittys.WittyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class WittyController {
      *  작성자: 김정민
      * */
     @PostMapping
-    public HashMap<String, Object> createWitty(@RequestBody CreateWittyDTO createWittyDTO, BindingResult bindingResult, @Login User user) throws Exception{
+    public HashMap<String, Object> createWitty(@RequestBody @Validated CreateWittyDTO createWittyDTO, BindingResult bindingResult, @Login User user) throws Exception{
         if(user == null) {
             throw new ForbbiddenException("로그인이 필요합니다!");
         }
@@ -54,7 +55,7 @@ public class WittyController {
      * */
     @PatchMapping("/{wittyId}")
     public HashMap<String, Object> updateWitty(@PathVariable Integer wittyId, @Login User user,
-                                               @RequestBody UpdateWittyDTO updateWittyDTO, BindingResult bindingResult) throws Exception{
+                                               @RequestBody @Validated UpdateWittyDTO updateWittyDTO, BindingResult bindingResult) throws Exception{
 
         if(user == null) {
             throw new ForbbiddenException("로그인이 필요합니다!");
