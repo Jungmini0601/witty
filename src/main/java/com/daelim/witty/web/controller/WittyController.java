@@ -24,6 +24,7 @@ public class WittyController {
 
     private final WittyService wittyService;
 
+    // xx
     // TODO 생성시 tag 테이블에 데이터 잘 넣어줘야 함
     /**
      *  위티 생성
