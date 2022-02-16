@@ -28,6 +28,15 @@ public class UserController {
 
     private final UserService userService;
 
+    private void showErrorLog(String methodName,BindingResult bindingResult) throws BadRequestException{
+        List<ObjectError> errorList = bindingResult.getAllErrors();
+
+        for (ObjectError error: errorList) {
+            log.error("[{} 에러] : {}", methodName, error.toString());
+        }
+
+        throw new BadRequestException("입력값 확인 필요");
+    }
     /**
     *  회원가입
     *  담당자 : 김진솔
@@ -36,13 +45,7 @@ public class UserController {
     public ResponseEntity<Object> signUp(@RequestBody @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult) throws Exception {
         // 입력값이 잘못 들어온 경우
         if (bindingResult.hasErrors()){
-            List<ObjectError> errorList = bindingResult.getAllErrors();
-
-            for (ObjectError error: errorList) {
-                log.error("[회원가입 에러] : {}", error.toString());
-            }
-
-            throw new BadRequestException("입력값 확인 필요");
+            showErrorLog("회원가입",bindingResult);
         }
 
         User user = new User(userSignUpDTO);
@@ -71,14 +74,12 @@ public class UserController {
      * 오성민
      */
     @PostMapping("/id_check")
-    public HashMap<String, Object> id_check(@RequestBody @Validated UserIdCheckDTO userIdCheckDTO, BindingResult bindingResult) throws Exception{
+    public ResponseEntity<Object> id_check(@RequestBody @Validated UserIdCheckDTO userIdCheckDTO, BindingResult bindingResult) throws Exception{
         HashMap<String, Object> response = new HashMap<>();
 
         if (bindingResult.hasErrors()){
-            throw new BadRequestException("입력값 확인 필요");
+            showErrorLog("아이디 중복 체크", bindingResult);
         }
-
-        log.info(userIdCheckDTO.getUser_id());
 
         boolean ret = userService.isDuplicatedId(userIdCheckDTO.getUser_id());
 
@@ -86,14 +87,14 @@ public class UserController {
             response.put("result", "아이디 중복 체크 완료");
             response.put("user_id", userIdCheckDTO.getUser_id());
 
-            return response;
+            return ResponseEntity.ok().body(response);
         }
 
 
-        response.put("result", "아이디가 이미 존재합니다");
+        response.put("result", "존재하는 아이디 입니다.");
         response.put("user_id", userIdCheckDTO.getUser_id());
 
-        return response;
+        return ResponseEntity.badRequest().body(response);
     }
 
     /**
