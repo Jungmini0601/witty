@@ -5,10 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Data
 public class SendVerificationCodeDTO {
 
-    @NotBlank
+    @NotBlank @Pattern(regexp = ".+@email\\.daelim\\.ac\\.kr")
     private String email;
 }

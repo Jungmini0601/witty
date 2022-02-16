@@ -17,7 +17,7 @@ public class MailService {
     private final JavaMailSender mailSender;
     private final EmailConfirmRepository emailConfirmRepository;
     private final static Random random = new Random(System.currentTimeMillis());
-
+    //TODO 나중에 환경변수로 제거 해야함
     private final String subject = "witty 인증 메일입니다.";
     private final String from = "jungmini0601@gmail.com";
     private String content;

@@ -103,23 +103,33 @@ public class UserController {
     *  작성자: 김정민
     */
     @PostMapping("/sendEmail")
-    public HashMap<String, Object> sendVerificationCode(@RequestBody SendVerificationCodeDTO sendVerificationCodeDTO) throws Exception{
+    public ResponseEntity<Object> sendVerificationCode(@RequestBody @Validated SendVerificationCodeDTO sendVerificationCodeDTO, BindingResult bindingResult) throws Exception{
         HashMap<String, Object> response = new HashMap<>();
+
+        if (bindingResult.hasErrors()){
+            showErrorLog("이메일 전송", bindingResult);
+        }
 
         EmailConfrim emailConfrim = new EmailConfrim();
         emailConfrim.setEmail(sendVerificationCodeDTO.getEmail());
 
         try {
             userService.emailConfirm(emailConfrim);
-        }catch (Exception e) {
+        }catch (BadRequestException e) {
+            log.error("[이메일 전송]: {}", e.getMessage());
+
+            response.put("result", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+        catch (Exception e) {
             log.error(e.getMessage());
-            throw e;
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
 
         response.put("result", "성공");
         response.put("email", emailConfrim.getEmail());
 
-        return response;
+        return ResponseEntity.ok().body(response);
     }
 
     /**
