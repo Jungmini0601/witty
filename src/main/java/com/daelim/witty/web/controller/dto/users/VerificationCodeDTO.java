@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Data
 public class VerificationCodeDTO {
 
-    @NotNull
+    @NotNull @Pattern(regexp = ".+@email\\.daelim\\.ac\\.kr")
     private String email;
 
     @NotNull

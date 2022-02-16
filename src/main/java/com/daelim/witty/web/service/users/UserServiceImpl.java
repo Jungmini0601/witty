@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public boolean verification(VerificationCodeDTO verificationCodeDTO) {
+    public boolean verification(VerificationCodeDTO verificationCodeDTO) throws BadRequestException{
 
         Optional<EmailConfrim> emailConfirmOptional = emailConfirmRepository.findByEmail(verificationCodeDTO.getEmail());
 

@@ -45,7 +45,7 @@ public class UserController {
     public ResponseEntity<Object> signUp(@RequestBody @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult) throws Exception {
         // 입력값이 잘못 들어온 경우
         if (bindingResult.hasErrors()){
-            showErrorLog("회원가입",bindingResult);
+            showErrorLog("회원가입", bindingResult);
         }
 
         User user = new User(userSignUpDTO);
@@ -137,19 +137,22 @@ public class UserController {
      * 작성자: 김정민
      * */
     @PostMapping("/verification")
-    public HashMap<String, Object> verification(@RequestBody VerificationCodeDTO verificationCodeDTO, BindingResult bindingResult) throws Exception {
+    public ResponseEntity<Object> verification(@RequestBody @Validated VerificationCodeDTO verificationCodeDTO, BindingResult bindingResult) throws Exception {
         if(bindingResult.hasErrors()) {
-            throw new BadRequestException("입력값 확인 필요");
+            showErrorLog("인증번호 확인", bindingResult);
         }
 
-        boolean ret = userService.verification(verificationCodeDTO); // 여기 인터
+        boolean ret = userService.verification(verificationCodeDTO);
 
         HashMap<String, Object> response = new HashMap<>();
 
-        if(ret) response.put("result", "성공");
-        else    response.put("result", "인증번호를 확인 해 주세요");
+        if(ret) {
+            response.put("result", "성공");
+            return ResponseEntity.ok().body(response);
+        }
 
-        return response;
+        response.put("result", "인증번호를 확인 해 주세요");
+        return ResponseEntity.badRequest().body(response);
     }
 
     /**
@@ -157,21 +160,21 @@ public class UserController {
      *  김정민
      * */
     @PostMapping("/login")
-    public HashMap<String, Object> login(@RequestBody @Validated UserLogInDTO userLogInDTO, BindingResult bindingResult, HttpServletRequest request) throws Exception{
+    public ResponseEntity<Object> login(@RequestBody @Validated UserLogInDTO userLogInDTO, BindingResult bindingResult, HttpServletRequest request) throws Exception{
 
         if(bindingResult.hasErrors()){
-            throw new BadRequestException("입력값 확인 필요");
+            showErrorLog("로그인", bindingResult);
         }
 
         User user = userService.login(userLogInDTO);
 
-        HashMap<String, Object> resultMap = new HashMap<>();
+        HashMap<String, Object> response = new HashMap<>();
 
         // 입력값이 통과 되었지만 맞지 않는 경우
         if(user == null
                 || !(user.getId().equals(userLogInDTO.getUser_id()) && user.getPassword().equals(userLogInDTO.getPassword()))) {
-            resultMap.put("result", "아이디 비밀번호 확인 필요");
-            return resultMap;
+            response.put("result", "아이디 비밀번호 확인 필요");
+            return ResponseEntity.badRequest().body(response);
         }
 
 
@@ -181,42 +184,42 @@ public class UserController {
         userResponse.put("user_email", user.getEmail());
         userResponse.put("user_department", user.getDepartment());
 
-        resultMap.put("result", "성공");
-        resultMap.put("user", userResponse);
+        response.put("result", "성공");
+        response.put("user", userResponse);
 
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_USER, user);
 
-        return resultMap;
+        return ResponseEntity.ok().body(response);
     }
 
     /**
      *  로그아웃
      * */
     @PostMapping("/logout")
-    public HashMap<String, String> logout(HttpServletRequest request) {
+    public ResponseEntity<Object> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
         if (session != null) {
             session.invalidate();
         }
 
-        HashMap<String, String> resultMap = new HashMap<>();
-        resultMap.put("result", "성공");
+        HashMap<String, String> response = new HashMap<>();
+        response.put("result", "성공");
 
-        return resultMap;
+        return ResponseEntity.ok().body(response);
     }
 
     /**인증 확인
      * 김정민
      * */
     @GetMapping("/auth")
-    public HashMap<String, Object> auth(@Login User user) {
+    public ResponseEntity<Object> auth(@Login User user) {
         HashMap<String, Object> response = new HashMap<>();
 
         if(user == null) {
-            response.put("result", "로그인 되지 않은 유저");
-            return response;
+            response.put("result", "로그인 정보가 없음");
+            return ResponseEntity.badRequest().body(response);
         }
 
         response.put("result", "성공");
@@ -228,6 +231,6 @@ public class UserController {
 
         response.put("user", userResponse);
 
-        return response;
+        return ResponseEntity.ok().body(response);
     }
 }
