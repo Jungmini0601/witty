@@ -9,7 +9,7 @@ public interface UserRepository {
       @Param User 저장할 user 객체
       @Return true 저장성공, false 저장실패
      */
-    public boolean save(User user);
+    public User save(User user);
 
     public Optional<User> findById(String id);
 }

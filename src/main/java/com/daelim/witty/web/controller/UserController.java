@@ -9,12 +9,15 @@ import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.service.users.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.http.HttpResponse;
 import java.util.*;
 
 @Slf4j
@@ -30,23 +33,23 @@ public class UserController {
     *  담당자 : 김진솔
     * */
     @PostMapping
-    public HashMap<String, Object> signUp(@RequestBody @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult) throws Exception {
+    public ResponseEntity<Object> signUp(@RequestBody @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult) throws Exception {
         // 입력값이 잘못 들어온 경우
         if (bindingResult.hasErrors()){
+            List<ObjectError> errorList = bindingResult.getAllErrors();
+
+            for (ObjectError error: errorList) {
+                log.error("[회원가입 에러] : {}", error.toString());
+            }
+
             throw new BadRequestException("입력값 확인 필요");
         }
 
-        //입력값이 제대로 들어 왔으니까 저장을하면 되잖아?
         User user = new User(userSignUpDTO);
 
-        boolean ret = userService.signUp(user);
+        userService.signUp(user);
 
         HashMap<String, Object> response = new HashMap<>();
-
-        if(!ret) {
-            response.put("result", "서버 에러");
-            return response;
-        }
 
         // 성공
         response.put("result", "성공");
@@ -59,7 +62,8 @@ public class UserController {
         response.put("user", userResponse);
 
 
-        return response;
+        return ResponseEntity.ok()
+                .body(response);
     }
 
     /**
@@ -67,7 +71,7 @@ public class UserController {
      * 오성민
      */
     @PostMapping("/id_check")
-    public HashMap<String, Object> id_check(@RequestBody @Validated UserIdCheckDTO userIdCheckDTO, BindingResult bindingResult) {
+    public HashMap<String, Object> id_check(@RequestBody @Validated UserIdCheckDTO userIdCheckDTO, BindingResult bindingResult) throws Exception{
         HashMap<String, Object> response = new HashMap<>();
 
         if (bindingResult.hasErrors()){
@@ -142,7 +146,7 @@ public class UserController {
      *  김정민
      * */
     @PostMapping("/login")
-    public HashMap<String, Object> login(@RequestBody @Validated UserLogInDTO userLogInDTO, BindingResult bindingResult, HttpServletRequest request) {
+    public HashMap<String, Object> login(@RequestBody @Validated UserLogInDTO userLogInDTO, BindingResult bindingResult, HttpServletRequest request) throws Exception{
 
         if(bindingResult.hasErrors()){
             throw new BadRequestException("입력값 확인 필요");

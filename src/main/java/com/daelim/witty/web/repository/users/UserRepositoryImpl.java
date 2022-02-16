@@ -26,7 +26,7 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public boolean save(User user) {
+    public User save(User user) {
 
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("witty_user");
@@ -37,13 +37,9 @@ public class UserRepositoryImpl implements UserRepository{
         params.put("user_department", user.getDepartment());
         params.put("user_password", user.getPassword());
 
-        try {
-            jdbcInsert.execute(params);
-        }catch (Exception e) {
-            return false;
-        }
+        jdbcInsert.execute(params);
 
-        return true;
+        return user;
     }
 
     @Override

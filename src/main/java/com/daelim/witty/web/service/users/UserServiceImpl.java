@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public boolean signUp(User user) {
+    public User signUp(User user) {
         return userRepository.save(user);
     }
 
