@@ -4,10 +4,13 @@ import com.daelim.witty.domain.Comment;
 import com.daelim.witty.domain.User;
 import com.daelim.witty.domain.Witty;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -108,5 +111,22 @@ public class CommentRepositoryImpl implements CommentRepository{
     @Override
     public Optional<Comment> findByCommentId(Integer commentId) throws Exception {
         return Optional.empty();
+    }
+
+    private RowMapper<Comment> commentRowMapper() {
+        return new RowMapper<Comment>() {
+            @Override
+            public Comment mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Comment comment = new Comment();
+
+                comment.setId(rs.getInt("witty_comment_id"));
+                comment.setUserId(rs.getString("user_id"));
+                comment.setWittyId(rs.getInt("witty_id"));
+                comment.setContent(rs.getString("witty_comment_content"));
+                comment.setCreatedAt(rs.getTimestamp("witty_comment_created_date"));
+
+                return comment;
+            }
+        };
     }
 }
