@@ -39,14 +39,14 @@ public class CommentRepositoryImpl implements CommentRepository{
         comment.setContent(comment.getContent());
         comment.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
 
-        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("comment").usingGeneratedKeyColumns("comment_id");
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("witty_comment").usingGeneratedKeyColumns("witty_comment_id");
 
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("comment_id",comment.getId());
+        parameters.put("witty_comment_id",comment.getId());
         parameters.put("user_id",comment.getUserId());
         parameters.put("witty_id",comment.getWittyId());
-        parameters.put("content",comment.getContent());
-        parameters.put("comment_created_date",comment.getCreatedAt());
+        parameters.put("witty_comment_content",comment.getContent());
+        parameters.put("witty_comment_created_date",comment.getCreatedAt());
 
         try {
             key = jdbcInsert.executeAndReturnKey(parameters);
@@ -63,7 +63,7 @@ public class CommentRepositoryImpl implements CommentRepository{
      * */
     @Override
     public Comment update(Comment comment, User user) throws Exception {
-        String sql = "update comment set comment = ? where comment_id = ?, user_id = ?";
+        String sql = "update comment set comment = ? where comment_id = ?";
 
         try {
             jdbcTemplate.update(sql, comment.getContent(), comment);
