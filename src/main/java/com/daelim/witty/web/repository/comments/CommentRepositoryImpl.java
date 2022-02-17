@@ -66,7 +66,7 @@ public class CommentRepositoryImpl implements CommentRepository{
      * */
     @Override
     public Comment update(Comment comment, User user) throws Exception {
-        String sql = "update comment set comment = ? where comment_id = ?";
+        String sql = "update witty_comment set witty_comment_content = ? where witty_comment_id = ?";
 
         try {
             jdbcTemplate.update(sql, comment.getContent(), comment);
@@ -84,7 +84,7 @@ public class CommentRepositoryImpl implements CommentRepository{
      * */
     @Override
     public Comment delete(Comment comment, User user) throws Exception {
-        String sql = "delete from comment where comment_id = ?";
+        String sql = "delete from witty_comment where witty_comment_id = ?";
 
         try{
             jdbcTemplate.update(sql, comment.getContent(), comment);
