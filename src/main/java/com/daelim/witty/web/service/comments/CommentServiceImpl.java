@@ -2,11 +2,16 @@ package com.daelim.witty.web.service.comments;
 
 import com.daelim.witty.domain.Comment;
 import com.daelim.witty.domain.User;
+import com.daelim.witty.domain.Witty;
 import com.daelim.witty.web.controller.dto.comments.CommentUpdateDTO;
+import com.daelim.witty.web.exception.BadRequestException;
+import com.daelim.witty.web.exception.ForbbiddenException;
 import com.daelim.witty.web.repository.comments.CommentRepository;
 import com.daelim.witty.web.repository.wittys.WittyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,12 +33,22 @@ public class CommentServiceImpl implements CommentService{
     /**
      * 요환이
      * @Param id: 수정할 댓글 번호
-     * @Param coomentUpdateDTO 수절할 내용 content
+     * @Param coomentUpdateDTO 수정할 내용 content
      * @Param user: 요청 보낸 유저
      * */
     @Override
     public Comment update(Integer id, CommentUpdateDTO commentUpdateDTO, User user) throws Exception {
-        return null;
+        Optional<Comment> optionalComment = commentRepository.findByCommentId(id);
+
+        if(optionalComment.isEmpty())throw new BadRequestException("해당하는 댓글을 찾을 수 없습니다.");
+
+        Comment comment = optionalComment.get();
+
+        if(!comment.getUserId().equals(user.getId())) throw new ForbbiddenException("작성자만 수정 할 수 있습니다");
+
+        comment.setContent(commentUpdateDTO.getContent());
+
+        return commentRepository.update(comment,user);
     }
     /**
      * 요환이
@@ -42,6 +57,14 @@ public class CommentServiceImpl implements CommentService{
      * */
     @Override
     public Comment delete(Integer id, User user) throws Exception {
-        return null;
+        Optional<Comment> optionalComment = commentRepository.findByCommentId(id);
+
+        if(optionalComment.isEmpty())throw new BadRequestException("해당하는 댓글을 찾을 수 없습니다.");
+
+        Comment comment = optionalComment.get();
+
+        if(!comment.getUserId().equals(user.getId())) throw new ForbbiddenException("작성자만 수정 할 수 있습니다");
+
+        return commentRepository.delete(comment,user);
     }
 }

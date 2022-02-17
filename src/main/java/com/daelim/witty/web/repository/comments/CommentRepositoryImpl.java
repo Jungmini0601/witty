@@ -101,7 +101,11 @@ public class CommentRepositoryImpl implements CommentRepository{
      * */
     @Override
     public List<Comment> findByWittyId(Integer wittyId) throws Exception {
-        return null;
+        String sql = "select * from witty_comment where witty_id = ?";
+
+        List<Comment> comment = jdbcTemplate.query(sql, commentRowMapper(), wittyId);
+
+        return comment;
     }
 
     /**
@@ -110,7 +114,11 @@ public class CommentRepositoryImpl implements CommentRepository{
      * */
     @Override
     public Optional<Comment> findByCommentId(Integer commentId) throws Exception {
-        return Optional.empty();
+        String sql = "select * from witty_comment where witty_comment_id = ?";
+
+        List<Comment> optionalComment = jdbcTemplate.query(sql, commentRowMapper(), commentId);
+
+        return optionalComment.stream().findAny();
     }
 
     private RowMapper<Comment> commentRowMapper() {
