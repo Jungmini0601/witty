@@ -7,8 +7,10 @@ import com.daelim.witty.web.controller.dto.comments.CommentUpdateDTO;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.exception.ForbbiddenException;
 import com.daelim.witty.web.repository.comments.CommentRepository;
+import com.daelim.witty.web.repository.users.UserRepository;
 import com.daelim.witty.web.repository.wittys.WittyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,6 +21,7 @@ public class CommentServiceImpl implements CommentService{
 
     private final CommentRepository commentRepository;
     private final WittyRepository wittyRepository;
+    private final UserRepository userRepository;
 
     /**
      * 진솔이형
@@ -27,7 +30,10 @@ public class CommentServiceImpl implements CommentService{
      * */
     @Override
     public Comment save(Comment comment, Integer wittyId, User user) throws Exception {
-        return null;
+        //User에 userId값 가져오기
+        Witty findWitty = wittyRepository.findById(wittyId).get();
+        //commentRepository에서 save 호출 후 반환하기
+        return commentRepository.save(comment,findWitty,user);
     }
 
     /**
