@@ -69,4 +69,21 @@ public class CommentController {
 
         return ResponseEntity.ok().body(response);
     }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Object> deleteComment(@PathVariable("commentId") Integer id,
+                                                @Login User user) throws Exception {
+
+        if(user == null) {
+            throw new UnAuthorizedException("로그인이 필요합니다");
+        }
+
+        Comment deletedComment = commentService.delete(id, user);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("result", "성공");
+        response.put("comment", deletedComment);
+
+        return ResponseEntity.ok().body(response);
+    }
 }

@@ -87,14 +87,15 @@ public class CommentRepositoryImpl implements CommentRepository{
     @Override
     public Comment delete(Comment comment, User user) throws Exception {
         String sql = "delete from witty_comment where witty_comment_id = ?";
+        Comment deletedComment = findByCommentId(comment.getId()).get();
 
         try{
-            jdbcTemplate.update(sql, comment.getContent(), comment);
+            jdbcTemplate.update(sql, comment.getId());
         } catch (Exception e) {
             throw new Exception("DB 에러!");
         }
 
-        return findByCommentId(comment.getId()).get();
+        return deletedComment;
     }
 
     /**
