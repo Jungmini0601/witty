@@ -4,6 +4,7 @@ import com.daelim.witty.domain.Comment;
 import com.daelim.witty.domain.User;
 import com.daelim.witty.web.argumentResolver.Login;
 import com.daelim.witty.web.controller.dto.comments.CommentCreateDTO;
+import com.daelim.witty.web.controller.dto.comments.CommentUpdateDTO;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.exception.UnAuthorizedException;
 import com.daelim.witty.web.service.comments.CommentService;
@@ -12,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -45,6 +43,29 @@ public class CommentController {
         HashMap<String, Object> response = new HashMap<>();
         response.put("result", "성공");
         response.put("comment", savedComment);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<Object> updateComment(@PathVariable("commentId") Integer id,
+                                                @RequestBody @Validated CommentUpdateDTO commentUpdateDTO,
+                                                BindingResult bindingResult,
+                                                @Login User user) throws Exception {
+
+        if(user == null) {
+            throw new UnAuthorizedException("로그인이 필요합니다");
+        }
+
+        if(bindingResult.hasErrors()) {
+            throw new BadRequestException("입력값을 확인 해 주세요");
+        }
+
+        Comment updatedComment = commentService.update(id, commentUpdateDTO, user);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("result", "성공");
+        response.put("comment", updatedComment);
 
         return ResponseEntity.ok().body(response);
     }

@@ -50,7 +50,7 @@ public class CommentServiceImpl implements CommentService{
     public Comment update(Integer id, CommentUpdateDTO commentUpdateDTO, User user) throws Exception {
         Optional<Comment> optionalComment = commentRepository.findByCommentId(id);
 
-        if(optionalComment.isEmpty())throw new BadRequestException("해당하는 댓글을 찾을 수 없습니다.");
+        if(optionalComment.isEmpty())throw new BadRequestException("입력값을 확인 해 주세요");
 
         Comment comment = optionalComment.get();
 
@@ -62,18 +62,18 @@ public class CommentServiceImpl implements CommentService{
     }
     /**
      * 요환이
-     * @Param id: 수정할 댓글 번호
+     * @Param id: 삭제할 댓글 번호
      * @Param user: 요청 보낸 유저
      * */
     @Override
     public Comment delete(Integer id, User user) throws Exception {
         Optional<Comment> optionalComment = commentRepository.findByCommentId(id);
 
-        if(optionalComment.isEmpty())throw new BadRequestException("해당하는 댓글을 찾을 수 없습니다.");
+        if(optionalComment.isEmpty())throw new BadRequestException("입력값을 확인 해 주세요");
 
         Comment comment = optionalComment.get();
 
-        if(!comment.getUserId().equals(user.getId())) throw new ForbbiddenException("작성자만 수정 할 수 있습니다");
+        if(!comment.getUserId().equals(user.getId())) throw new ForbbiddenException("작성자만 삭제 할 수 있습니다");
 
         return commentRepository.delete(comment,user);
     }

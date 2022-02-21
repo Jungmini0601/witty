@@ -3,6 +3,7 @@ package com.daelim.witty.web.repository.comments;
 import com.daelim.witty.domain.Comment;
 import com.daelim.witty.domain.User;
 import com.daelim.witty.domain.Witty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Repository
 public class CommentRepositoryImpl implements CommentRepository{
     private final JdbcTemplate jdbcTemplate;
@@ -69,7 +71,7 @@ public class CommentRepositoryImpl implements CommentRepository{
         String sql = "update witty_comment set witty_comment_content = ? where witty_comment_id = ?";
 
         try {
-            jdbcTemplate.update(sql, comment.getContent(), comment);
+            jdbcTemplate.update(sql, comment.getContent(), comment.getId());
         }catch (Exception e) {
             throw new Exception("DB 에러!");
         }
