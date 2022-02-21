@@ -40,7 +40,7 @@ public class CommentRepositoryImpl implements CommentRepository{
         comment.setUserId(user.getId()); //요청 보낸 유저아이디 <-어떤 요청인지 정확히 전송에 쓸 요청인지
         comment.setWittyId(witty.getId());//댓글에 달릴 위티아이디
         comment.setContent(comment.getContent());
-        comment.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        comment.setCreatedAt(comment.getCreatedAt());
 
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("witty_comment").usingGeneratedKeyColumns("witty_comment_id");
 

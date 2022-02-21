@@ -30,10 +30,14 @@ public class CommentServiceImpl implements CommentService{
      * */
     @Override
     public Comment save(Comment comment, Integer wittyId, User user) throws Exception {
-        //User에 userId값 가져오기
-        Witty findWitty = wittyRepository.findById(wittyId).get();
-        //commentRepository에서 save 호출 후 반환하기
-        return commentRepository.save(comment,findWitty,user);
+
+        Optional<Witty> wittyOptional = wittyRepository.findById(wittyId);
+
+        if(wittyOptional.isEmpty()) {
+            throw new BadRequestException("입력값 확인 필요");
+        }
+
+        return commentRepository.save(comment, wittyOptional.get(), user);
     }
 
     /**
