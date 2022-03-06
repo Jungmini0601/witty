@@ -1,8 +1,8 @@
 package com.daelim.witty.web.repository.comments;
 
-import com.daelim.witty.domain.Comment;
-import com.daelim.witty.domain.User;
-import com.daelim.witty.domain.Witty;
+import com.daelim.witty.domain.v1.Comment;
+import com.daelim.witty.domain.v1.User;
+import com.daelim.witty.domain.v1.Witty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,8 +12,6 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

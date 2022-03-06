@@ -1,8 +1,8 @@
 package com.daelim.witty.web.repository.comments;
 
-import com.daelim.witty.domain.Comment;
-import com.daelim.witty.domain.User;
-import com.daelim.witty.domain.Witty;
+import com.daelim.witty.domain.v1.Comment;
+import com.daelim.witty.domain.v1.User;
+import com.daelim.witty.domain.v1.Witty;
 
 import java.util.List;
 import java.util.Optional;

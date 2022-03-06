@@ -1,6 +1,6 @@
 package com.daelim.witty.web.repository.users;
 
-import com.daelim.witty.domain.User;
+import com.daelim.witty.domain.v1.User;
 
 import java.util.Optional;
 

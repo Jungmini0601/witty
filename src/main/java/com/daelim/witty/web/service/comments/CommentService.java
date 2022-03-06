@@ -1,12 +1,9 @@
 package com.daelim.witty.web.service.comments;
 
 
-import com.daelim.witty.domain.Comment;
-import com.daelim.witty.domain.User;
-import com.daelim.witty.domain.Witty;
+import com.daelim.witty.domain.v1.Comment;
+import com.daelim.witty.domain.v1.User;
 import com.daelim.witty.web.controller.dto.comments.CommentUpdateDTO;
-import com.daelim.witty.web.controller.dto.wittys.CreateWittyDTO;
-import com.daelim.witty.web.controller.dto.wittys.UpdateWittyDTO;
 
 public interface CommentService {
     // 생성

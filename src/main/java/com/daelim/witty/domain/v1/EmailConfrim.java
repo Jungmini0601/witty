@@ -1,4 +1,4 @@
-package com.daelim.witty.domain;
+package com.daelim.witty.domain.v1;
 
 import lombok.Getter;
 import lombok.Setter;

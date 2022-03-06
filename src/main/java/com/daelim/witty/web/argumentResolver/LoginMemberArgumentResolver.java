@@ -1,6 +1,6 @@
 package com.daelim.witty.web.argumentResolver;
 
-import com.daelim.witty.domain.User;
+import com.daelim.witty.domain.v1.User;
 import com.daelim.witty.web.SessionConst;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

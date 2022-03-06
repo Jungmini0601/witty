@@ -1,7 +1,7 @@
 package com.daelim.witty.web.controller;
 
-import com.daelim.witty.domain.Comment;
-import com.daelim.witty.domain.User;
+import com.daelim.witty.domain.v1.Comment;
+import com.daelim.witty.domain.v1.User;
 import com.daelim.witty.web.argumentResolver.Login;
 import com.daelim.witty.web.controller.dto.comments.CommentCreateDTO;
 import com.daelim.witty.web.controller.dto.comments.CommentUpdateDTO;

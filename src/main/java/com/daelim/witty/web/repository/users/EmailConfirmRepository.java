@@ -1,6 +1,6 @@
 package com.daelim.witty.web.repository.users;
 
-import com.daelim.witty.domain.EmailConfrim;
+import com.daelim.witty.domain.v1.EmailConfrim;
 
 import java.util.Optional;
 

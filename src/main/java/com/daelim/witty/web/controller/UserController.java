@@ -1,7 +1,7 @@
 package com.daelim.witty.web.controller;
 
-import com.daelim.witty.domain.EmailConfrim;
-import com.daelim.witty.domain.User;
+import com.daelim.witty.domain.v1.EmailConfrim;
+import com.daelim.witty.domain.v1.User;
 import com.daelim.witty.web.SessionConst;
 import com.daelim.witty.web.argumentResolver.Login;
 import com.daelim.witty.web.controller.dto.users.*;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.net.http.HttpResponse;
 import java.util.*;
 
 @Slf4j

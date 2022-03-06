@@ -1,6 +1,6 @@
 package com.daelim.witty.web.service.users;
 
-import com.daelim.witty.domain.EmailConfrim;
+import com.daelim.witty.domain.v1.EmailConfrim;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.repository.users.EmailConfirmRepository;
 import lombok.RequiredArgsConstructor;

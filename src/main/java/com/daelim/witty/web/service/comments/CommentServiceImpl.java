@@ -1,8 +1,8 @@
 package com.daelim.witty.web.service.comments;
 
-import com.daelim.witty.domain.Comment;
-import com.daelim.witty.domain.User;
-import com.daelim.witty.domain.Witty;
+import com.daelim.witty.domain.v1.Comment;
+import com.daelim.witty.domain.v1.User;
+import com.daelim.witty.domain.v1.Witty;
 import com.daelim.witty.web.controller.dto.comments.CommentUpdateDTO;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.exception.ForbbiddenException;
@@ -10,7 +10,6 @@ import com.daelim.witty.web.repository.comments.CommentRepository;
 import com.daelim.witty.web.repository.users.UserRepository;
 import com.daelim.witty.web.repository.wittys.WittyRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

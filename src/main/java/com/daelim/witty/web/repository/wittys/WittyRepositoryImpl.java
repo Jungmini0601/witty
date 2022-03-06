@@ -1,11 +1,9 @@
 package com.daelim.witty.web.repository.wittys;
 
-import com.daelim.witty.domain.User;
-import com.daelim.witty.domain.Witty;
+import com.daelim.witty.domain.v1.User;
+import com.daelim.witty.domain.v1.Witty;
 import com.daelim.witty.web.controller.dto.wittys.CreateWittyDTO;
 import com.daelim.witty.web.controller.dto.wittys.UpdateWittyDTO;
-import com.daelim.witty.web.exception.BadRequestException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;

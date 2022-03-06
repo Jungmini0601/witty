@@ -1,7 +1,7 @@
 package com.daelim.witty.web.service.users;
 
-import com.daelim.witty.domain.EmailConfrim;
-import com.daelim.witty.domain.User;
+import com.daelim.witty.domain.v1.EmailConfrim;
+import com.daelim.witty.domain.v1.User;
 import com.daelim.witty.web.controller.dto.users.UserLogInDTO;
 import com.daelim.witty.web.controller.dto.users.VerificationCodeDTO;
 
