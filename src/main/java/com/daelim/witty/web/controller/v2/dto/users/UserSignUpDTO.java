@@ -1,4 +1,4 @@
-package com.daelim.witty.web.controller.v2.dto;
+package com.daelim.witty.web.controller.v2.dto.users;
 
 import lombok.Data;
 

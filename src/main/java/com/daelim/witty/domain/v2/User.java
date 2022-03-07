@@ -1,6 +1,6 @@
 package com.daelim.witty.domain.v2;
 
-import com.daelim.witty.web.controller.v2.dto.UserSignUpDTO;
+import com.daelim.witty.web.controller.v2.dto.users.UserSignUpDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;

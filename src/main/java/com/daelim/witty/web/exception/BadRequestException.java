@@ -3,6 +3,8 @@ package com.daelim.witty.web.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.function.Supplier;
+
 /**
  * @Author: 김정민
  * @Use: 입력값이 검증 실패시 호출하는 에러
