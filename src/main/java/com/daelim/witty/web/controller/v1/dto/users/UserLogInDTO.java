@@ -1,8 +1,6 @@
-package com.daelim.witty.web.controller.dto.users;
+package com.daelim.witty.web.controller.v1.dto.users;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;

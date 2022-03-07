@@ -2,8 +2,8 @@ package com.daelim.witty.web.service.wittys;
 
 import com.daelim.witty.domain.v1.User;
 import com.daelim.witty.domain.v1.Witty;
-import com.daelim.witty.web.controller.dto.wittys.CreateWittyDTO;
-import com.daelim.witty.web.controller.dto.wittys.UpdateWittyDTO;
+import com.daelim.witty.web.controller.v1.dto.wittys.CreateWittyDTO;
+import com.daelim.witty.web.controller.v1.dto.wittys.UpdateWittyDTO;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.exception.ForbbiddenException;
 import com.daelim.witty.web.repository.wittys.WittyRepository;

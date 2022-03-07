@@ -1,4 +1,4 @@
-package com.daelim.witty.web.controller.dto.comments;
+package com.daelim.witty.web.controller.v1.dto.comments;
 
 import lombok.Data;
 

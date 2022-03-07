@@ -2,8 +2,8 @@ package com.daelim.witty.web.repository.wittys;
 
 import com.daelim.witty.domain.v1.User;
 import com.daelim.witty.domain.v1.Witty;
-import com.daelim.witty.web.controller.dto.wittys.CreateWittyDTO;
-import com.daelim.witty.web.controller.dto.wittys.UpdateWittyDTO;
+import com.daelim.witty.web.controller.v1.dto.wittys.CreateWittyDTO;
+import com.daelim.witty.web.controller.v1.dto.wittys.UpdateWittyDTO;
 
 import java.util.Optional;
 

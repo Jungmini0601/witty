@@ -1,8 +1,6 @@
-package com.daelim.witty.web.controller.dto.wittys;
+package com.daelim.witty.web.controller.v1.dto.wittys;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

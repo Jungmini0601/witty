@@ -1,12 +1,12 @@
-package com.daelim.witty.web.controller;
+package com.daelim.witty.web.controller.v1;
 
 import com.daelim.witty.domain.v1.EmailConfrim;
 import com.daelim.witty.domain.v1.User;
 import com.daelim.witty.web.SessionConst;
 import com.daelim.witty.web.argumentResolver.Login;
-import com.daelim.witty.web.controller.dto.users.*;
+import com.daelim.witty.web.controller.v1.dto.users.*;
 import com.daelim.witty.web.exception.BadRequestException;
-import com.daelim.witty.web.service.users.UserService;
+import com.daelim.witty.web.service.users.v1.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ import java.util.*;
 @Slf4j
 @RequestMapping("/users")
 @RequiredArgsConstructor
-@RestController
+//@RestController
 public class UserController {
 
     private final UserService userService;

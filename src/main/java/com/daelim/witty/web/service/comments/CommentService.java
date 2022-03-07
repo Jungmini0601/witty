@@ -3,7 +3,7 @@ package com.daelim.witty.web.service.comments;
 
 import com.daelim.witty.domain.v1.Comment;
 import com.daelim.witty.domain.v1.User;
-import com.daelim.witty.web.controller.dto.comments.CommentUpdateDTO;
+import com.daelim.witty.web.controller.v1.dto.comments.CommentUpdateDTO;
 
 public interface CommentService {
     // 생성

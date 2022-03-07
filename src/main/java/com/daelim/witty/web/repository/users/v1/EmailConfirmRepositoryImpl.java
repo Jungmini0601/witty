@@ -1,4 +1,4 @@
-package com.daelim.witty.web.repository.users;
+package com.daelim.witty.web.repository.users.v1;
 
 import com.daelim.witty.domain.v1.EmailConfrim;
 import lombok.extern.slf4j.Slf4j;

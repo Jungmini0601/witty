@@ -1,10 +1,10 @@
-package com.daelim.witty.web.controller;
+package com.daelim.witty.web.controller.v1;
 
 import com.daelim.witty.domain.v1.Comment;
 import com.daelim.witty.domain.v1.User;
 import com.daelim.witty.web.argumentResolver.Login;
-import com.daelim.witty.web.controller.dto.comments.CommentCreateDTO;
-import com.daelim.witty.web.controller.dto.comments.CommentUpdateDTO;
+import com.daelim.witty.web.controller.v1.dto.comments.CommentCreateDTO;
+import com.daelim.witty.web.controller.v1.dto.comments.CommentUpdateDTO;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.exception.UnAuthorizedException;
 import com.daelim.witty.web.service.comments.CommentService;

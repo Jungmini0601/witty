@@ -1,5 +1,6 @@
 package com.daelim.witty.domain.v2;
 
+import com.daelim.witty.web.controller.v2.dto.UserSignUpDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -65,4 +66,14 @@ public class User {
         }
     }
 
+    /*생성 메서드*/
+    public static User createUserByDTO(UserSignUpDTO userSignUpDTO) {
+        User user = new User();
+        user.id = userSignUpDTO.getUser_id();
+        user.email = userSignUpDTO.getUser_email();
+        user.department = userSignUpDTO.getUser_department();
+        user.password = userSignUpDTO.getPassword();
+
+        return user;
+    }
 }

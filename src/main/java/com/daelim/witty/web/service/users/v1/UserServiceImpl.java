@@ -1,19 +1,17 @@
-package com.daelim.witty.web.service.users;
+package com.daelim.witty.web.service.users.v1;
 
 import com.daelim.witty.domain.v1.EmailConfrim;
 import com.daelim.witty.domain.v1.User;
-import com.daelim.witty.web.controller.dto.users.UserLogInDTO;
-import com.daelim.witty.web.controller.dto.users.VerificationCodeDTO;
+import com.daelim.witty.web.controller.v1.dto.users.UserLogInDTO;
+import com.daelim.witty.web.controller.v1.dto.users.VerificationCodeDTO;
 import com.daelim.witty.web.exception.BadRequestException;
-import com.daelim.witty.web.repository.users.EmailConfirmRepository;
-import com.daelim.witty.web.repository.users.UserRepository;
+import com.daelim.witty.web.repository.users.v1.EmailConfirmRepository;
+import com.daelim.witty.web.repository.users.v1.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Service
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
