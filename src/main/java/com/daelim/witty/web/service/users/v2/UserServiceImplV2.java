@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImplV2 implements UserServiceV2 {
 
     private final UserRepository userRepository;
+    private final MailService mailService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -37,9 +38,10 @@ public class UserServiceImplV2 implements UserServiceV2 {
         return userRepository.findById(id).isPresent();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void emailConfirm(EmailVerification emailVerification) throws Exception {
-
+        mailService.sendMail(emailVerification);
     }
 
     @Override

@@ -35,10 +35,7 @@ class UserServiceImplV2Test {
         User user = User.createUserByDTO(userSignUpDTO);
 
         userServiceImplV2.signUp(user);
-        em.flush();
-
         User retUser = userRepository.findById(user.getId()).get();
-
         assertEquals(user.getId(), retUser.getId());
     }
 

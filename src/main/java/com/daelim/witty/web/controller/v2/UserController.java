@@ -1,6 +1,9 @@
 package com.daelim.witty.web.controller.v2;
 
+import com.daelim.witty.domain.v1.EmailConfrim;
+import com.daelim.witty.domain.v2.EmailVerification;
 import com.daelim.witty.domain.v2.User;
+import com.daelim.witty.web.controller.v2.dto.users.SendVerificationCodeDTO;
 import com.daelim.witty.web.controller.v2.dto.users.UserIdCheckDTO;
 import com.daelim.witty.web.controller.v2.dto.users.UserSignUpDTO;
 import com.daelim.witty.web.exception.BadRequestException;
@@ -80,5 +83,35 @@ public class UserController {
         response.put("result", "존재하는 아이디 입니다.");
         response.put("user_id", userIdCheckDTO.getUser_id());
         return ResponseEntity.badRequest().body(response);
+    }
+
+    //이메일 전송
+    @PostMapping("/sendEmail")
+    public ResponseEntity<Object> sendVerificationCode(@RequestBody @Validated SendVerificationCodeDTO sendVerificationCodeDTO, BindingResult bindingResult) throws Exception{
+        HashMap<String, Object> response = new HashMap<>();
+
+        if (bindingResult.hasErrors()){
+            showErrorLog("이메일 전송", bindingResult);
+        }
+
+        EmailVerification emailVerification = EmailVerification.createEmailVerificationByDTO(sendVerificationCodeDTO);
+
+        try {
+            userService.emailConfirm(emailVerification);
+        }catch (BadRequestException e) {
+            log.error("[이메일 전송]: {}", e.getMessage());
+
+            response.put("result", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+
+        response.put("result", "성공");
+        response.put("email", emailVerification.getEmail());
+
+        return ResponseEntity.ok().body(response);
     }
 }
