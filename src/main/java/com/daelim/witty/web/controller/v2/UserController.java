@@ -1,8 +1,9 @@
 package com.daelim.witty.web.controller.v2;
 
-import com.daelim.witty.domain.v1.EmailConfrim;
+
 import com.daelim.witty.domain.v2.EmailVerification;
 import com.daelim.witty.domain.v2.User;
+import com.daelim.witty.web.controller.v2.dto.users.VerificationCodeDTO;
 import com.daelim.witty.web.controller.v2.dto.users.SendVerificationCodeDTO;
 import com.daelim.witty.web.controller.v2.dto.users.UserIdCheckDTO;
 import com.daelim.witty.web.controller.v2.dto.users.UserSignUpDTO;
@@ -113,5 +114,23 @@ public class UserController {
         response.put("email", emailVerification.getEmail());
 
         return ResponseEntity.ok().body(response);
+    }
+
+    // 인증번호 확인
+    @PostMapping("/verification")
+    public ResponseEntity<Object> verification(@RequestBody @Validated VerificationCodeDTO verificationCodeDTO, BindingResult bindingResult) throws Exception {
+        if(bindingResult.hasErrors()) {
+            showErrorLog("인증번호 확인", bindingResult);
+        }
+
+        HashMap<String, Object> response = new HashMap<>();
+
+        if(userService.verification(verificationCodeDTO)) {
+            response.put("result", "성공");
+            return ResponseEntity.ok().body(response);
+        }
+
+        response.put("result", "인증번호를 확인 해 주세요");
+        return ResponseEntity.badRequest().body(response);
     }
 }

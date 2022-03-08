@@ -4,7 +4,7 @@ package com.daelim.witty.web.service.users.v2;
 import com.daelim.witty.domain.v2.EmailVerification;
 import com.daelim.witty.domain.v2.User;
 import com.daelim.witty.web.controller.v1.dto.users.UserLogInDTO;
-import com.daelim.witty.web.controller.v1.dto.users.VerificationCodeDTO;
+import com.daelim.witty.web.controller.v2.dto.users.VerificationCodeDTO;
 
 public interface UserServiceV2 {
     /**
