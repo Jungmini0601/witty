@@ -169,4 +169,19 @@ public class UserController {
 
         return ResponseEntity.ok().body(response);
     }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity<Object> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+
+        HashMap<String, String> response = new HashMap<>();
+        response.put("result", "성공");
+
+        return ResponseEntity.ok().body(response);
+    }
 }
