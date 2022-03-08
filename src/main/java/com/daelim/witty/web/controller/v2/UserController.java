@@ -4,6 +4,7 @@ package com.daelim.witty.web.controller.v2;
 import com.daelim.witty.domain.v2.EmailVerification;
 import com.daelim.witty.domain.v2.User;
 import com.daelim.witty.web.SessionConst;
+import com.daelim.witty.web.argumentResolver.Login;
 import com.daelim.witty.web.controller.v2.dto.users.UserLogInDTO;
 import com.daelim.witty.web.controller.v2.dto.users.VerificationCodeDTO;
 import com.daelim.witty.web.controller.v2.dto.users.SendVerificationCodeDTO;
@@ -17,10 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -181,6 +179,28 @@ public class UserController {
 
         HashMap<String, String> response = new HashMap<>();
         response.put("result", "성공");
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    // 인증확인
+    @GetMapping("/auth")
+    public ResponseEntity<Object> auth(@Login User user) {
+        HashMap<String, Object> response = new HashMap<>();
+
+        if(user == null) {
+            response.put("result", "로그인 정보가 없음");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        response.put("result", "성공");
+
+        HashMap<String, Object> userResponse = new HashMap<>();
+        userResponse.put("user_id", user.getId());
+        userResponse.put("user_email", user.getEmail());
+        userResponse.put("user_department", user.getDepartment());
+
+        response.put("user", userResponse);
 
         return ResponseEntity.ok().body(response);
     }
