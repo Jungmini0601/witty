@@ -3,6 +3,8 @@ package com.daelim.witty.web.controller.v2;
 
 import com.daelim.witty.domain.v2.EmailVerification;
 import com.daelim.witty.domain.v2.User;
+import com.daelim.witty.web.SessionConst;
+import com.daelim.witty.web.controller.v2.dto.users.UserLogInDTO;
 import com.daelim.witty.web.controller.v2.dto.users.VerificationCodeDTO;
 import com.daelim.witty.web.controller.v2.dto.users.SendVerificationCodeDTO;
 import com.daelim.witty.web.controller.v2.dto.users.UserIdCheckDTO;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 
@@ -132,5 +136,37 @@ public class UserController {
 
         response.put("result", "인증번호를 확인 해 주세요");
         return ResponseEntity.badRequest().body(response);
+    }
+
+    // 로그인
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody @Validated UserLogInDTO userLogInDTO, BindingResult bindingResult, HttpServletRequest request) throws Exception{
+
+        if(bindingResult.hasErrors()){
+            showErrorLog("로그인", bindingResult);
+        }
+
+        User user = userService.login(userLogInDTO);
+        HashMap<String, Object> response = new HashMap<>();
+
+        // 입력값이 통과 되었지만 맞지 않는 경우
+        if(user == null
+                || !(user.getId().equals(userLogInDTO.getUser_id()) && user.getPassword().equals(userLogInDTO.getPassword()))) {
+            response.put("result", "아이디 비밀번호 확인 필요");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        HashMap<String, String> userResponse = new HashMap<>();
+        userResponse.put("user_id", user.getId());
+        userResponse.put("user_email", user.getEmail());
+        userResponse.put("user_department", user.getDepartment());
+
+        response.put("result", "성공");
+        response.put("user", userResponse);
+
+        HttpSession session = request.getSession();
+        session.setAttribute(SessionConst.LOGIN_USER, user);
+
+        return ResponseEntity.ok().body(response);
     }
 }

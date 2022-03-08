@@ -2,7 +2,7 @@ package com.daelim.witty.web.service.users.v2;
 
 import com.daelim.witty.domain.v2.EmailVerification;
 import com.daelim.witty.domain.v2.User;
-import com.daelim.witty.web.controller.v1.dto.users.UserLogInDTO;
+import com.daelim.witty.web.controller.v2.dto.users.UserLogInDTO;
 import com.daelim.witty.web.controller.v2.dto.users.VerificationCodeDTO;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.repository.users.v2.EmailVerificationRepository;
@@ -34,7 +34,8 @@ public class UserServiceImplV2 implements UserServiceV2 {
 
     @Override
     public User login(UserLogInDTO userLogInDTO) throws Exception {
-        return null;
+        return userRepository.findById(userLogInDTO.getUser_id())
+                .filter(user -> user.getPassword().equals(userLogInDTO.getPassword())).orElse(null);
     }
 
     //아이디가 존재하지않으면 true 존재하면 false
