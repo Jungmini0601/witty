@@ -1,4 +1,4 @@
-package com.daelim.witty.web.service.wittys;
+package com.daelim.witty.web.service.wittys.v1;
 
 import com.daelim.witty.domain.v1.User;
 import com.daelim.witty.domain.v1.Witty;
@@ -6,7 +6,7 @@ import com.daelim.witty.web.controller.v1.dto.wittys.CreateWittyDTO;
 import com.daelim.witty.web.controller.v1.dto.wittys.UpdateWittyDTO;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.exception.ForbbiddenException;
-import com.daelim.witty.web.repository.wittys.WittyRepository;
+import com.daelim.witty.web.repository.wittys.v1.WittyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

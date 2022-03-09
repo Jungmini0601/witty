@@ -7,7 +7,7 @@ import com.daelim.witty.web.controller.v1.dto.wittys.CreateWittyDTO;
 import com.daelim.witty.web.controller.v1.dto.wittys.UpdateWittyDTO;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.exception.ForbbiddenException;
-import com.daelim.witty.web.service.wittys.WittyService;
+import com.daelim.witty.web.service.wittys.v1.WittyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 @Slf4j
 @RequestMapping("/wittys")
 @RequiredArgsConstructor
-@RestController
+//@RestController
 public class WittyController {
 
     private final WittyService wittyService;

@@ -15,8 +15,10 @@ public class WittyLike {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Witty comment;
+    @JoinColumn(name = "witty_id")
+    private Witty witty;
 }

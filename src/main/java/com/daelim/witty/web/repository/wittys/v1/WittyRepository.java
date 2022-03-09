@@ -1,4 +1,4 @@
-package com.daelim.witty.web.repository.wittys;
+package com.daelim.witty.web.repository.wittys.v1;
 
 import com.daelim.witty.domain.v1.User;
 import com.daelim.witty.domain.v1.Witty;

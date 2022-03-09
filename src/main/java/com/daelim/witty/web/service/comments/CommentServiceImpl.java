@@ -8,7 +8,7 @@ import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.exception.ForbbiddenException;
 import com.daelim.witty.web.repository.comments.CommentRepository;
 import com.daelim.witty.web.repository.users.v1.UserRepository;
-import com.daelim.witty.web.repository.wittys.WittyRepository;
+import com.daelim.witty.web.repository.wittys.v1.WittyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

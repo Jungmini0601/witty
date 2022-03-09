@@ -1,4 +1,4 @@
-package com.daelim.witty.web.service.wittys;
+package com.daelim.witty.web.service.wittys.v1;
 
 
 import com.daelim.witty.domain.v1.User;

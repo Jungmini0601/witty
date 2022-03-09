@@ -19,9 +19,11 @@ public class Comment {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY) // 댓글을 보여 줄 때는 user 정보가 반드시 필요하다
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY) // 댓글을 보여 줄 때는 witty 정보가 반드시 필요하다
+    @JoinColumn(name = "witty_id")
     private Witty witty;
 
     private LocalDateTime createdDateTime;

@@ -1,6 +1,5 @@
 package com.daelim.witty.web.controller.v2;
 
-
 import com.daelim.witty.domain.v2.EmailVerification;
 import com.daelim.witty.domain.v2.User;
 import com.daelim.witty.web.SessionConst;

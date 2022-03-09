@@ -21,6 +21,7 @@ public class User {
     private String id;
     private String email;
     private String department; // 학부
+    @JsonIgnore
     private String password;
 
     @JsonIgnore
