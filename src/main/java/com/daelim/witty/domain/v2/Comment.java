@@ -1,6 +1,7 @@
 package com.daelim.witty.domain.v2;
 
 import com.daelim.witty.web.controller.v2.dto.comments.CreateCommentRequest;
+import com.daelim.witty.web.controller.v2.dto.comments.UpdateCommentRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -40,5 +41,9 @@ public class Comment {
         comment.user = user;
         comment.createdDateTime = LocalDateTime.now();
         return comment;
+    }
+
+    public void updateComment(UpdateCommentRequest updateCommentRequest) {
+        this.content = updateCommentRequest.getContent();
     }
 }

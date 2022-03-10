@@ -3,8 +3,7 @@ package com.daelim.witty.web.controller.v2;
 import com.daelim.witty.domain.v2.Comment;
 import com.daelim.witty.domain.v2.User;
 import com.daelim.witty.web.argumentResolver.Login;
-import com.daelim.witty.web.controller.v2.dto.comments.CreateCommentRequest;
-import com.daelim.witty.web.controller.v2.dto.comments.CreateCommentResponse;
+import com.daelim.witty.web.controller.v2.dto.comments.*;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.exception.UnAuthorizedException;
 import com.daelim.witty.web.service.comments.v2.CommentServiceV2;
@@ -48,8 +47,8 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<Object> updateComment(@PathVariable("commentId") Integer id,
-                                                @RequestBody @Validated CommentUpdateDTO commentUpdateDTO,
+    public ResponseEntity<Object> updateComment(@PathVariable("commentId") Long id,
+                                                @RequestBody @Validated UpdateCommentRequest updateCommentRequest,
                                                 BindingResult bindingResult,
                                                 @Login User user) throws Exception {
 
@@ -61,29 +60,30 @@ public class CommentController {
             throw new BadRequestException("입력값을 확인 해 주세요");
         }
 
-        Comment updatedComment = commentService.update(id, commentUpdateDTO, user);
+        Comment comment = commentService.update(id, updateCommentRequest, user);
+        UpdateCommentResponse updateCommentResponse = UpdateCommentResponse.success(comment, user);
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("result", "성공");
-        response.put("comment", updatedComment);
+        response.put("comment", updateCommentResponse);
+        return ResponseEntity.ok(response);
+    }
 
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Object> deleteComment(@PathVariable("commentId") Long id,
+                                                @Login User user) throws Exception {
+
+        if(user == null) {
+            throw new UnAuthorizedException("로그인이 필요합니다");
+        }
+
+        Comment comment = commentService.delete(id, user);
+
+        DeleteCommentResponse deletedComment = DeleteCommentResponse.success(comment,user);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("result", "성공");
+        response.put("comment", deletedComment);
         return ResponseEntity.ok().body(response);
     }
-//
-//    @DeleteMapping("/{commentId}")
-//    public ResponseEntity<Object> deleteComment(@PathVariable("commentId") Integer id,
-//                                                @Login User user) throws Exception {
-//
-//        if(user == null) {
-//            throw new UnAuthorizedException("로그인이 필요합니다");
-//        }
-//
-//        Comment deletedComment = commentService.delete(id, user);
-//
-//        HashMap<String, Object> response = new HashMap<>();
-//        response.put("result", "성공");
-//        response.put("comment", deletedComment);
-//
-//        return ResponseEntity.ok().body(response);
-//    }
 }
