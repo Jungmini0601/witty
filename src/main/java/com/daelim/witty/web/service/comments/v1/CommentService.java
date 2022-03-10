@@ -1,4 +1,4 @@
-package com.daelim.witty.web.service.comments;
+package com.daelim.witty.web.service.comments.v1;
 
 
 import com.daelim.witty.domain.v1.Comment;

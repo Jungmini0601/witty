@@ -1,4 +1,4 @@
-package com.daelim.witty.web.service.comments;
+package com.daelim.witty.web.service.comments.v1;
 
 import com.daelim.witty.domain.v1.Comment;
 import com.daelim.witty.domain.v1.User;
@@ -6,7 +6,7 @@ import com.daelim.witty.domain.v1.Witty;
 import com.daelim.witty.web.controller.v1.dto.comments.CommentUpdateDTO;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.exception.ForbbiddenException;
-import com.daelim.witty.web.repository.comments.CommentRepository;
+import com.daelim.witty.web.repository.comments.v1.CommentRepository;
 import com.daelim.witty.web.repository.users.v1.UserRepository;
 import com.daelim.witty.web.repository.wittys.v1.WittyRepository;
 import lombok.RequiredArgsConstructor;

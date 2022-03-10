@@ -1,5 +1,7 @@
 package com.daelim.witty.domain.v2;
 
+import com.daelim.witty.web.controller.v2.dto.comments.CreateCommentRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,13 +20,25 @@ public class Comment {
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY) // 댓글을 보여 줄 때는 user 정보가 반드시 필요하다
+    @ManyToOne // 댓글을 보여 줄 때는 user 정보가 반드시 필요하다
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY) // 댓글을 보여 줄 때는 witty 정보가 반드시 필요하다
+    @JsonIgnore
+    @ManyToOne // 댓글을 보여 줄 때는 witty 정보가 반드시 필요하다
     @JoinColumn(name = "witty_id")
     private Witty witty;
 
     private LocalDateTime createdDateTime;
+
+    //연관 관계 메서드 생성
+    public static Comment createComment(CreateCommentRequest createCommentRequest, Witty witty, User user) {
+        Comment comment = new Comment();
+        comment.content = createCommentRequest.getContent();
+        comment.witty = witty;
+        witty.getComments().add(comment);
+        comment.user = user;
+        comment.createdDateTime = LocalDateTime.now();
+        return comment;
+    }
 }

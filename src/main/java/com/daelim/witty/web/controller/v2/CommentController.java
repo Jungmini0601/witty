@@ -1,13 +1,13 @@
-package com.daelim.witty.web.controller.v1;
+package com.daelim.witty.web.controller.v2;
 
-import com.daelim.witty.domain.v1.Comment;
-import com.daelim.witty.domain.v1.User;
+import com.daelim.witty.domain.v2.Comment;
+import com.daelim.witty.domain.v2.User;
 import com.daelim.witty.web.argumentResolver.Login;
-import com.daelim.witty.web.controller.v1.dto.comments.CommentCreateDTO;
-import com.daelim.witty.web.controller.v1.dto.comments.CommentUpdateDTO;
+import com.daelim.witty.web.controller.v2.dto.comments.CreateCommentRequest;
+import com.daelim.witty.web.controller.v2.dto.comments.CreateCommentResponse;
 import com.daelim.witty.web.exception.BadRequestException;
 import com.daelim.witty.web.exception.UnAuthorizedException;
-import com.daelim.witty.web.service.comments.v1.CommentService;
+import com.daelim.witty.web.service.comments.v2.CommentServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +18,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 
 @Slf4j
-@RequestMapping("/comments")
+@RequestMapping("/v2/comments")
 @RequiredArgsConstructor
-//@RestController
+@RestController
 public class CommentController {
 
-    private final CommentService commentService;
+    private final CommentServiceV2 commentService;
 
     @PostMapping
-    public ResponseEntity<Object> createComment(@RequestBody @Validated CommentCreateDTO commentCreateDTO,
+    public ResponseEntity<Object> createComment(@RequestBody @Validated CreateCommentRequest createCommentRequest,
                                                 BindingResult bindingResult,
                                                 @Login User user) throws Exception{
         if(user == null) {
@@ -37,14 +37,14 @@ public class CommentController {
             throw new BadRequestException("입력값을 확인 해 주세요");
         }
 
-        Comment comment = new Comment(commentCreateDTO, user);
-        Comment savedComment = commentService.save(comment, commentCreateDTO.getWittyId(), user);
+        Comment comment = commentService.save(createCommentRequest, user);
+        CreateCommentResponse createCommentResponse = CreateCommentResponse.success(comment, user);
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("result", "성공");
-        response.put("comment", savedComment);
+        response.put("comment", createCommentResponse);
 
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{commentId}")
@@ -69,21 +69,21 @@ public class CommentController {
 
         return ResponseEntity.ok().body(response);
     }
-
-    @DeleteMapping("/{commentId}")
-    public ResponseEntity<Object> deleteComment(@PathVariable("commentId") Integer id,
-                                                @Login User user) throws Exception {
-
-        if(user == null) {
-            throw new UnAuthorizedException("로그인이 필요합니다");
-        }
-
-        Comment deletedComment = commentService.delete(id, user);
-
-        HashMap<String, Object> response = new HashMap<>();
-        response.put("result", "성공");
-        response.put("comment", deletedComment);
-
-        return ResponseEntity.ok().body(response);
-    }
+//
+//    @DeleteMapping("/{commentId}")
+//    public ResponseEntity<Object> deleteComment(@PathVariable("commentId") Integer id,
+//                                                @Login User user) throws Exception {
+//
+//        if(user == null) {
+//            throw new UnAuthorizedException("로그인이 필요합니다");
+//        }
+//
+//        Comment deletedComment = commentService.delete(id, user);
+//
+//        HashMap<String, Object> response = new HashMap<>();
+//        response.put("result", "성공");
+//        response.put("comment", deletedComment);
+//
+//        return ResponseEntity.ok().body(response);
+//    }
 }
