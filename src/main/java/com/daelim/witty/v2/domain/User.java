@@ -34,10 +34,12 @@ public class User {
     @JoinColumn
     private User userFollower = this;
 
+    // TODO fetch 타입 이거 어떻게 해야 할지 고민 필요함.
     @JsonIgnore
     @OneToMany(mappedBy = "userFollowing")
     private List<User> followingList = new ArrayList<User>();
 
+    // TODO fetch 타입 이거 어떻게 해야 할지 고민 필요함.
     @JsonIgnore
     @OneToMany(mappedBy = "userFollower")
     private List<User> followerList = new ArrayList<User>();

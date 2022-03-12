@@ -25,11 +25,13 @@ public class Witty {
     @JoinColumn(name = "user_id")
     private User user;
 
+    //TODO fetch 타입 고민 필요
     @OneToMany(mappedBy = "witty", cascade = CascadeType.ALL) // 글이 지워지면 댓글을 다 지워준다.
     private List<Comment> comments = new ArrayList<>();
 
     private String content;
 
+    // TODO Witty - Tag 관계 1 : N으로 할 지 N : M으로 할지 결정 해야 함.
     @OneToMany(mappedBy = "witty", cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
 
