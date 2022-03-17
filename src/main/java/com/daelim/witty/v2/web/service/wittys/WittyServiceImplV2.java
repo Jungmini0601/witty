@@ -12,10 +12,13 @@ import com.daelim.witty.v2.web.repository.wittys.WittyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -60,7 +63,9 @@ public class WittyServiceImplV2 implements WittyServiceV2 {
         return wittyOptional.get();
     }
 
-    public Page<Witty> findAllWittys(Pageable pageable)throws Exception {
-        return wittyRepository.findAll(pageable);
+    @Override
+    public List<Witty> findAll(Integer page, Integer size) throws Exception {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdDateTime").descending());
+        return wittyRepository.findAll(pageRequest).getContent();
     }
 }

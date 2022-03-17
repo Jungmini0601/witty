@@ -30,12 +30,9 @@ public class WittyController {
     private final WittyServiceV2 wittyService;
 
     @GetMapping
-    public List<GetWittyResponse> find(Pageable pageable) throws Exception{
-        Page<Witty> wittyPage = wittyService.findAllWittys(pageable);
-
-        List<GetWittyResponse> wittyResponses = wittyPage.getContent().stream().map(GetWittyResponse::success).collect(Collectors.toList());
-
-        return wittyResponses;
+    public List<GetWittyResponse> find(@RequestParam("page") Integer page, @RequestParam("size") Integer size) throws Exception{
+        List<Witty> witties = wittyService.findAll(page, size);
+        return witties.stream().map(GetWittyResponse::success).collect(Collectors.toList());
     }
 
     //위티 생성

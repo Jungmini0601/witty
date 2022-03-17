@@ -9,6 +9,8 @@ import com.daelim.witty.v2.web.controller.dto.wittys.UpdateWittyRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface WittyServiceV2 {
     Witty writeWitty(CreateWittyRequest createWittyRequest, User user) throws Exception;
 
@@ -16,5 +18,5 @@ public interface WittyServiceV2 {
 
     Witty deleteWitty(Long wittyId, User user) throws Exception;
 
-    Page<Witty> findAllWittys(Pageable pageable) throws Exception;
+    List<Witty> findAll(Integer page, Integer size) throws Exception;
 }
