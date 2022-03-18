@@ -10,16 +10,19 @@ public interface UserServiceV2 {
     /**
      * 회원가입
      * */
-    public User signUp(User user) throws Exception;
+    User signUp(User user) throws Exception;
     /**
      *  로그인
      * */
-    public User login(UserLogInDTO userLogInDTO) throws Exception;
+    User login(UserLogInDTO userLogInDTO) throws Exception;
     /** 아이디 중복 체크*/
-    public boolean isDuplicatedId(String id) throws Exception;
+    boolean isDuplicatedId(String id) throws Exception;
 
     /** 이메일 인증 저장*/
-    public void emailConfirm(EmailVerification emailVerification) throws Exception;
+    void emailConfirm(EmailVerification emailVerification) throws Exception;
 
     boolean verification(VerificationCodeDTO verificationCodeDTO) throws Exception;
+
+    /* 팔로우 추가 */
+    void addFollow(String toUserName, String fromUsername) throws Exception;
 }

@@ -24,59 +24,5 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn
-    private User userFollowing = this;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn
-    private User userFollower = this;
-
-    // TODO fetch 타입 이거 어떻게 해야 할지 고민 필요함.
-    @JsonIgnore
-    @OneToMany(mappedBy = "userFollowing")
-    private List<User> followingList = new ArrayList<User>();
-
-    // TODO fetch 타입 이거 어떻게 해야 할지 고민 필요함.
-    @JsonIgnore
-    @OneToMany(mappedBy = "userFollower")
-    private List<User> followerList = new ArrayList<User>();
-
-    /*연관관계 메서드 */
-    public void addFollowing(User following) {
-        this.followingList.add(following);
-
-        if(!following.getFollowerList().contains(this)) {
-            following.getFollowerList().add(this);
-        }
-        //연관관계의 주인을 통한 확인
-        if(!following.getUserFollower().getFollowerList().contains(this)) {
-            following.getUserFollower().getFollowerList().add(this);
-        }
-    }
-
-    public void addFollower(User follower) {
-        this.followerList.add(follower);
-
-        if(follower.getFollowingList().contains(this)) {
-            follower.getFollowingList().add(this);
-        }
-        //연관관계의 주인을 통한 확인
-        if(!follower.getUserFollowing().getFollowingList().contains(this)) {
-            follower.getUserFollowing().getFollowingList().add(this);
-        }
-    }
-
-    /*생성 메서드*/
-    public static User createUserByDTO(UserSignUpDTO userSignUpDTO) {
-        User user = new User();
-        user.id = userSignUpDTO.getUser_id();
-        user.email = userSignUpDTO.getUser_email();
-        user.department = userSignUpDTO.getUser_department();
-        user.password = userSignUpDTO.getPassword();
-
-        return user;
-    }
 }

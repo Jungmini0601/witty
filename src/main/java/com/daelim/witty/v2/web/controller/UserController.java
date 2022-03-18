@@ -8,10 +8,13 @@ import com.daelim.witty.v2.web.argumentResolver.Login;
 import com.daelim.witty.v2.web.controller.dto.users.*;
 
 import com.daelim.witty.v2.web.exception.BadRequestException;
+import com.daelim.witty.v2.web.exception.ForbbiddenException;
+import com.daelim.witty.v2.web.exception.UnAuthorizedException;
 import com.daelim.witty.v2.web.service.users.UserServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -200,5 +203,22 @@ public class UserController {
         response.put("user", userResponse);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    // 팔로우 요청
+    @PostMapping("/follow")
+    public ResponseEntity<Object> follow(@RequestBody @Validated FollowRequest followRequest, BindingResult bindingResult,
+                                         @Login User user) throws Exception{
+        if(user == null) {
+            throw new ForbbiddenException("로그인이 필요합니다!");
+        }
+
+        if(bindingResult.hasErrors()) {
+            showErrorLog("팔로우 신청", bindingResult);
+        }
+
+        userService.addFollow(followRequest.getToUserId(), user.getId());
+
+        return ResponseEntity.ok(followRequest);
     }
 }
