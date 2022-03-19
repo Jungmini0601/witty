@@ -81,6 +81,17 @@ public class UserServiceImplV2 implements UserServiceV2 {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
+    public void cancelFollow(String toUserName, String fromUserName) throws Exception {
+        User fromUser = userRepository.findById(fromUserName).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+        User toUser = userRepository.findById(toUserName).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+        Follow follow = followRepository.findByFromUserAndToUser(fromUser, toUser)
+                .orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+
+        followRepository.delete(follow);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
     public void likeWitty(Long wittyId, User user) throws Exception {
         Witty witty = wittyRepository.findById(wittyId).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
         WittyLike likeInfo = new WittyLike(user, witty);

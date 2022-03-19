@@ -220,6 +220,23 @@ public class UserController {
         return ResponseEntity.ok(followRequest);
     }
 
+    // 팔로우 취소
+    @DeleteMapping("/follow")
+    public ResponseEntity<Object> followCancel(@RequestBody @Validated FollowCancelRequest followCancelRequest,
+                                               BindingResult bindingResult,
+                                                @Login User user) throws Exception{
+        if(user == null) {
+            throw new ForbbiddenException("로그인이 필요합니다!");
+        }
+
+        if(bindingResult.hasErrors()) {
+            showErrorLog("팔로우 신청", bindingResult);
+        }
+
+        userService.cancelFollow(followCancelRequest.getToUserId(), user.getId());
+
+        return ResponseEntity.ok(followCancelRequest);
+    }
     // 위티 좋아요
     @PostMapping("/witty/like/{wittyId}")
     public ResponseEntity<Object> wittyLike(@PathVariable Long wittyId, @Login User user) throws Exception {
@@ -265,7 +282,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // 위티 좋아요 취소
+    // 댓글 좋아요 취소
     @PostMapping("/comment/unlike/{commentId}")
     public ResponseEntity<Object> commentUnLike(@PathVariable Long commentId, @Login User user) throws Exception {
         if(user == null) {

@@ -24,8 +24,9 @@ public interface UserServiceV2 {
     boolean verification(VerificationCodeDTO verificationCodeDTO) throws Exception;
 
     /* 팔로우 추가 */
-    void addFollow(String toUserName, String fromUsername) throws Exception;
+    void addFollow(String toUserName, String fromUserName) throws Exception;
 
+    void cancelFollow(String toUserName, String fromUserName) throws Exception;
     /*위티 좋아요*/
     void likeWitty(Long wittyId, User user) throws Exception;
 
