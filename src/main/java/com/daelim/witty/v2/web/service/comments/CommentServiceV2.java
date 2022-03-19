@@ -6,6 +6,8 @@ import com.daelim.witty.v2.domain.User;
 import com.daelim.witty.v2.web.controller.dto.comments.CreateCommentRequest;
 import com.daelim.witty.v2.web.controller.dto.comments.UpdateCommentRequest;
 
+import java.util.List;
+
 public interface CommentServiceV2 {
     // 생성
     Comment save(CreateCommentRequest createCommentRequest, User user) throws Exception;
@@ -14,4 +16,6 @@ public interface CommentServiceV2 {
     // 삭제
     Comment delete(Long id, User user) throws Exception;
 
+    // 조회
+    List<Comment> getCommentList(Long wittyId, Integer page, Integer size) throws Exception;
 }

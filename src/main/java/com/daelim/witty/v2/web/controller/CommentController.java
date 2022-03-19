@@ -3,8 +3,10 @@ package com.daelim.witty.v2.web.controller;
 
 import com.daelim.witty.v2.domain.Comment;
 import com.daelim.witty.v2.domain.User;
+import com.daelim.witty.v2.domain.Witty;
 import com.daelim.witty.v2.web.argumentResolver.Login;
 import com.daelim.witty.v2.web.controller.dto.comments.*;
+import com.daelim.witty.v2.web.controller.dto.wittys.GetWittyResponse;
 import com.daelim.witty.v2.web.exception.BadRequestException;
 import com.daelim.witty.v2.web.exception.UnAuthorizedException;
 import com.daelim.witty.v2.web.service.comments.CommentServiceV2;
@@ -16,6 +18,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequestMapping("/v2/comments")
@@ -24,6 +28,14 @@ import java.util.HashMap;
 public class CommentController {
 
     private final CommentServiceV2 commentService;
+
+    @GetMapping("/{wittyId}")
+    public List<GetCommentResponse> find(@PathVariable Long wittyId,
+                                         @RequestParam("page") Integer page,
+                                         @RequestParam("size") Integer size) throws Exception{
+        List<Comment> comments = commentService.getCommentList(wittyId, page, size);
+        return comments.stream().map(GetCommentResponse::success).collect(Collectors.toList());
+    }
 
     @PostMapping
     public ResponseEntity<Object> createComment(@RequestBody @Validated CreateCommentRequest createCommentRequest,
