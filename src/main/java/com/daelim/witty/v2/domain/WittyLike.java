@@ -21,4 +21,9 @@ public class WittyLike {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "witty_id")
     private Witty witty;
+
+    public WittyLike(User user, Witty witty) {
+        this.user = user;
+        this.witty = witty;
+    }
 }

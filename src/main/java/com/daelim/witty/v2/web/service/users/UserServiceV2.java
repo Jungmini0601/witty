@@ -25,4 +25,10 @@ public interface UserServiceV2 {
 
     /* 팔로우 추가 */
     void addFollow(String toUserName, String fromUsername) throws Exception;
+
+    /*위티 좋아요*/
+    void likeWitty(Long wittyId, User user) throws Exception;
+
+    /*위티 좋아요 취소*/
+    void unlikeWitty(Long wittyId, User user) throws Exception;
 }

@@ -25,4 +25,12 @@ public class User {
     private String password;
 
 
+    public static User createUserByDTO(UserSignUpDTO userSignUpDTO) {
+        User user = new User();
+        user.id = userSignUpDTO.getUser_id();
+        user.email = userSignUpDTO.getUser_email();
+        user.department = userSignUpDTO.getUser_department();
+        user.password = userSignUpDTO.getPassword();
+        return user;
+    }
 }

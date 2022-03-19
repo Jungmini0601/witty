@@ -1,15 +1,15 @@
 package com.daelim.witty.v2.web.service.users;
 
 
-import com.daelim.witty.v2.domain.EmailVerification;
-import com.daelim.witty.v2.domain.Follow;
-import com.daelim.witty.v2.domain.User;
+import com.daelim.witty.v2.domain.*;
 import com.daelim.witty.v2.web.controller.dto.users.UserLogInDTO;
 import com.daelim.witty.v2.web.controller.dto.users.VerificationCodeDTO;
 import com.daelim.witty.v2.web.exception.BadRequestException;
 import com.daelim.witty.v2.web.repository.users.EmailVerificationRepository;
 import com.daelim.witty.v2.web.repository.users.FollowRepository;
 import com.daelim.witty.v2.web.repository.users.UserRepository;
+import com.daelim.witty.v2.web.repository.users.WittyLikeRepository;
+import com.daelim.witty.v2.web.repository.wittys.WittyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,8 @@ public class UserServiceImplV2 implements UserServiceV2 {
     private final MailService mailService;
     private final EmailVerificationRepository emailVerificationRepository;
     private final FollowRepository followRepository;
+    private final WittyLikeRepository wittyLikeRepository;
+    private final WittyRepository wittyRepository;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -74,5 +76,23 @@ public class UserServiceImplV2 implements UserServiceV2 {
 
         Follow follow = new Follow(toUser, fromUser);
         followRepository.save(follow);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void likeWitty(Long wittyId, User user) throws Exception {
+        Witty witty = wittyRepository.findById(wittyId).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+        WittyLike likeInfo = new WittyLike(user, witty);
+        wittyLikeRepository.save(likeInfo);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void unlikeWitty(Long wittyId, User user) throws Exception {
+        Witty witty = wittyRepository.findById(wittyId).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+        WittyLike wittyLike = wittyLikeRepository.findByWittyAndUser(witty, user)
+                .orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+
+        wittyLikeRepository.delete(wittyLike);
     }
 }

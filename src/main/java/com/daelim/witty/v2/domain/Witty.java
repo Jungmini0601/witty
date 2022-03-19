@@ -2,6 +2,8 @@ package com.daelim.witty.v2.domain;
 
 import com.daelim.witty.v2.web.controller.dto.wittys.CreateWittyRequest;
 import com.daelim.witty.v2.web.controller.dto.wittys.UpdateWittyRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +26,10 @@ public class Witty {
     @ManyToOne //witty에 유저정보는 필수적으로 사용할것
     @JoinColumn(name = "user_id")
     private User user;
+
+    @JsonIgnoreProperties({"witty"})
+    @OneToMany(mappedBy = "witty")
+    private List<WittyLike> likeList = new ArrayList<>();
 
     //TODO fetch 타입 고민 필요
     @OneToMany(mappedBy = "witty", cascade = CascadeType.ALL) // 글이 지워지면 댓글을 다 지워준다.

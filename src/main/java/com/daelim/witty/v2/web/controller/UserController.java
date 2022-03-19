@@ -9,12 +9,10 @@ import com.daelim.witty.v2.web.controller.dto.users.*;
 
 import com.daelim.witty.v2.web.exception.BadRequestException;
 import com.daelim.witty.v2.web.exception.ForbbiddenException;
-import com.daelim.witty.v2.web.exception.UnAuthorizedException;
 import com.daelim.witty.v2.web.service.users.UserServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -220,5 +218,34 @@ public class UserController {
         userService.addFollow(followRequest.getToUserId(), user.getId());
 
         return ResponseEntity.ok(followRequest);
+    }
+
+    // 위티 좋아요
+    @PostMapping("/witty/like/{wittyId}")
+    public ResponseEntity<Object> wittyLike(@PathVariable Long wittyId, @Login User user) throws Exception {
+        if(user == null) {
+            throw new ForbbiddenException("로그인이 필요합니다!");
+        }
+
+        userService.likeWitty(wittyId, user);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("wittyId", wittyId);
+        response.put("userId", user.getId());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/witty/unlike/{wittyId}")
+    public ResponseEntity<Object> wittyUnLike(@PathVariable Long wittyId, @Login User user) throws Exception {
+        if(user == null) {
+            throw new ForbbiddenException("로그인이 필요합니다!");
+        }
+
+        userService.unlikeWitty(wittyId, user);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("wittyId", wittyId);
+        response.put("userId", user.getId());
+        return ResponseEntity.ok(response);
     }
 }
