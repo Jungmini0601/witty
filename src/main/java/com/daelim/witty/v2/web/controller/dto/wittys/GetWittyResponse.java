@@ -16,8 +16,8 @@ public class GetWittyResponse {
     private LocalDateTime createdDateTime;
     private User user;
     private String content;
-    private List<Comment> comments = new ArrayList<>();
     private List<Tag> tags = new ArrayList<>();
+    private Integer likes;
 
     public static GetWittyResponse success(Witty witty) {
         GetWittyResponse response = new GetWittyResponse();
@@ -26,7 +26,7 @@ public class GetWittyResponse {
         response.user = witty.getUser();
         response.content = witty.getContent();
         response.tags = witty.getTags();
-        response.comments = witty.getComments();
+        response.likes = witty.getLikeList().size();
         return response;
     }
 }

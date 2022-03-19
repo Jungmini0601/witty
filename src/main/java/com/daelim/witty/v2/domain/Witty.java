@@ -32,6 +32,7 @@ public class Witty {
     private List<WittyLike> likeList = new ArrayList<>();
 
     //TODO fetch 타입 고민 필요
+    @JsonIgnoreProperties({"witty"})
     @OneToMany(mappedBy = "witty", cascade = CascadeType.ALL) // 글이 지워지면 댓글을 다 지워준다.
     private List<Comment> comments = new ArrayList<>();
 
