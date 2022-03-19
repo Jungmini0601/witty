@@ -10,8 +10,7 @@ import com.daelim.witty.v2.web.exception.ForbbiddenException;
 import com.daelim.witty.v2.web.service.wittys.WittyServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +28,7 @@ public class WittyController {
 
     private final WittyServiceV2 wittyService;
 
+    //TODO 위티 리스트를 돌면서 내가 좋아요 한건지 파악 해 본다. 그리고 응답 값에 추가 해 주면 됨
     @GetMapping
     public List<GetWittyResponse> find(@RequestParam("page") Integer page, @RequestParam("size") Integer size) throws Exception{
         List<Witty> witties = wittyService.findAll(page, size);

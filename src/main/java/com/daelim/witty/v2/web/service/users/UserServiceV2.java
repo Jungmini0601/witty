@@ -31,4 +31,10 @@ public interface UserServiceV2 {
 
     /*위티 좋아요 취소*/
     void unlikeWitty(Long wittyId, User user) throws Exception;
+
+    /*댓글 좋아요*/
+    void likeComment(Long commentId, User user) throws Exception;
+
+    /*위티 좋아요 취소*/
+    void unlikeComment(Long commentId, User user) throws Exception;
 }

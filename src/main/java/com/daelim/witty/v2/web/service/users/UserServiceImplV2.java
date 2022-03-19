@@ -1,14 +1,13 @@
 package com.daelim.witty.v2.web.service.users;
 
 
+import com.daelim.witty.v1.web.repository.comments.CommentRepository;
 import com.daelim.witty.v2.domain.*;
 import com.daelim.witty.v2.web.controller.dto.users.UserLogInDTO;
 import com.daelim.witty.v2.web.controller.dto.users.VerificationCodeDTO;
 import com.daelim.witty.v2.web.exception.BadRequestException;
-import com.daelim.witty.v2.web.repository.users.EmailVerificationRepository;
-import com.daelim.witty.v2.web.repository.users.FollowRepository;
-import com.daelim.witty.v2.web.repository.users.UserRepository;
-import com.daelim.witty.v2.web.repository.users.WittyLikeRepository;
+import com.daelim.witty.v2.web.repository.comments.CommentRepositoryV2;
+import com.daelim.witty.v2.web.repository.users.*;
 import com.daelim.witty.v2.web.repository.wittys.WittyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +28,8 @@ public class UserServiceImplV2 implements UserServiceV2 {
     private final FollowRepository followRepository;
     private final WittyLikeRepository wittyLikeRepository;
     private final WittyRepository wittyRepository;
+    private final CommentRepositoryV2 commentRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -94,5 +95,26 @@ public class UserServiceImplV2 implements UserServiceV2 {
                 .orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
 
         wittyLikeRepository.delete(wittyLike);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void likeComment(Long commentId, User user) throws Exception {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+
+        CommentLike likeInfo = new CommentLike(user, comment);
+        commentLikeRepository.save(likeInfo);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void unlikeComment(Long commentId, User user) throws Exception {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+
+        CommentLike likeInfo = commentLikeRepository.findByCommentAndUser(comment, user)
+                .orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+        commentLikeRepository.delete(likeInfo);
     }
 }

@@ -235,6 +235,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    // 위티 좋아요 취소
     @PostMapping("/witty/unlike/{wittyId}")
     public ResponseEntity<Object> wittyUnLike(@PathVariable Long wittyId, @Login User user) throws Exception {
         if(user == null) {
@@ -245,6 +246,36 @@ public class UserController {
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("wittyId", wittyId);
+        response.put("userId", user.getId());
+        return ResponseEntity.ok(response);
+    }
+
+    // 댓글 좋아요
+    @PostMapping("/comment/like/{commentId}")
+    public ResponseEntity<Object> commentLike(@PathVariable Long commentId, @Login User user) throws Exception {
+        if(user == null) {
+            throw new ForbbiddenException("로그인이 필요합니다!");
+        }
+
+        userService.likeComment(commentId, user);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("commentId", commentId);
+        response.put("userId", user.getId());
+        return ResponseEntity.ok(response);
+    }
+
+    // 위티 좋아요 취소
+    @PostMapping("/comment/unlike/{commentId}")
+    public ResponseEntity<Object> commentUnLike(@PathVariable Long commentId, @Login User user) throws Exception {
+        if(user == null) {
+            throw new ForbbiddenException("로그인이 필요합니다!");
+        }
+
+        userService.unlikeComment(commentId, user);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("commentId", commentId);
         response.put("userId", user.getId());
         return ResponseEntity.ok(response);
     }

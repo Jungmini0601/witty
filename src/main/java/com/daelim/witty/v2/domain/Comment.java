@@ -4,12 +4,15 @@ package com.daelim.witty.v2.domain;
 import com.daelim.witty.v2.web.controller.dto.comments.CreateCommentRequest;
 import com.daelim.witty.v2.web.controller.dto.comments.UpdateCommentRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -32,6 +35,10 @@ public class Comment {
     private Witty witty;
 
     private LocalDateTime createdDateTime;
+
+    @JsonIgnoreProperties({"comment"})
+    @OneToMany(mappedBy = "comment")
+    private List<CommentLike> likeList = new ArrayList<>();
 
     //연관 관계 메서드 생성
     public static Comment createComment(CreateCommentRequest createCommentRequest, Witty witty, User user) {
