@@ -28,11 +28,11 @@ public class WittyController {
 
     private final WittyServiceV2 wittyService;
 
-    //TODO 위티 리스트를 돌면서 내가 좋아요 한건지 파악 해 본다. 그리고 응답 값에 추가 해 주면 됨
+    //TODO 조회 성능 최적화 필요 할 수도 있음.
     @GetMapping
-    public List<GetWittyResponse> find(@RequestParam("page") Integer page, @RequestParam("size") Integer size) throws Exception{
+    public List<GetWittyResponse> find(@RequestParam("page") Integer page, @RequestParam("size") Integer size, @Login User user) throws Exception{
         List<Witty> witties = wittyService.findAll(page, size);
-        return witties.stream().map(GetWittyResponse::success).collect(Collectors.toList());
+        return witties.stream().map(witty -> GetWittyResponse.success(witty, user)).collect(Collectors.toList());
     }
 
     //위티 생성
