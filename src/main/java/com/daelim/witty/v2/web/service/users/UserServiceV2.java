@@ -3,8 +3,11 @@ package com.daelim.witty.v2.web.service.users;
 
 import com.daelim.witty.v2.domain.EmailVerification;
 import com.daelim.witty.v2.domain.User;
+import com.daelim.witty.v2.web.controller.dto.users.GetFollowerResponse;
 import com.daelim.witty.v2.web.controller.dto.users.UserLogInDTO;
 import com.daelim.witty.v2.web.controller.dto.users.VerificationCodeDTO;
+
+import java.util.List;
 
 public interface UserServiceV2 {
     /**
@@ -38,4 +41,6 @@ public interface UserServiceV2 {
 
     /*위티 좋아요 취소*/
     void unlikeComment(Long commentId, User user) throws Exception;
+    /* 팔로워 조회 */
+    List<GetFollowerResponse> getFollower(String profileId, String loginId) throws Exception;
 }

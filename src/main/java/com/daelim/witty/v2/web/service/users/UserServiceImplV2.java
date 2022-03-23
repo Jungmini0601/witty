@@ -3,6 +3,7 @@ package com.daelim.witty.v2.web.service.users;
 
 import com.daelim.witty.v1.web.repository.comments.CommentRepository;
 import com.daelim.witty.v2.domain.*;
+import com.daelim.witty.v2.web.controller.dto.users.GetFollowerResponse;
 import com.daelim.witty.v2.web.controller.dto.users.UserLogInDTO;
 import com.daelim.witty.v2.web.controller.dto.users.VerificationCodeDTO;
 import com.daelim.witty.v2.web.exception.BadRequestException;
@@ -11,9 +12,15 @@ import com.daelim.witty.v2.web.repository.users.*;
 import com.daelim.witty.v2.web.repository.wittys.WittyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.qlrm.mapper.JpaResultMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -30,6 +37,7 @@ public class UserServiceImplV2 implements UserServiceV2 {
     private final WittyRepository wittyRepository;
     private final CommentRepositoryV2 commentRepository;
     private final CommentLikeRepository commentLikeRepository;
+    private final EntityManager em;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -88,6 +96,20 @@ public class UserServiceImplV2 implements UserServiceV2 {
                 .orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
 
         followRepository.delete(follow);
+    }
+
+    public List<GetFollowerResponse> getFollower(String profileId, String loginId) throws Exception {
+        String sb = "SELECT u.user_id, u.email, u.department ," +
+                "if ((SELECT 1 FROM follow WHERE from_user_id = ? AND to_user_id = u.user_id), TRUE, FALSE) AS followState " +
+                "FROM user u, follow f " +
+                "WHERE u.user_id = f.from_user_id AND f.to_user_id = ?";
+
+        Query query =  em.createNativeQuery(sb)
+                         .setParameter(1, loginId)
+                         .setParameter(2, profileId);
+
+        JpaResultMapper result = new JpaResultMapper();
+        return result.list(query, GetFollowerResponse.class);
     }
 
     @Transactional(rollbackFor = Exception.class)

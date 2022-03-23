@@ -12,6 +12,7 @@ import com.daelim.witty.v2.web.exception.ForbbiddenException;
 import com.daelim.witty.v2.web.service.users.UserServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -237,6 +238,13 @@ public class UserController {
 
         return ResponseEntity.ok(followCancelRequest);
     }
+
+    // 팔로워 조회
+    @GetMapping("/{profileId}/follower")
+    public ResponseEntity<?> getFollower(@PathVariable String profileId, @Login User user) throws Exception{
+        return new ResponseEntity<>(userService.getFollower(profileId, user.getId()), HttpStatus.OK);
+    }
+
     // 위티 좋아요
     @PostMapping("/witty/like/{wittyId}")
     public ResponseEntity<Object> wittyLike(@PathVariable Long wittyId, @Login User user) throws Exception {
