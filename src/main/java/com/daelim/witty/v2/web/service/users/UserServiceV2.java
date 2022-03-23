@@ -4,6 +4,7 @@ package com.daelim.witty.v2.web.service.users;
 import com.daelim.witty.v2.domain.EmailVerification;
 import com.daelim.witty.v2.domain.User;
 import com.daelim.witty.v2.web.controller.dto.users.GetFollowerResponse;
+import com.daelim.witty.v2.web.controller.dto.users.GetFollowingResponse;
 import com.daelim.witty.v2.web.controller.dto.users.UserLogInDTO;
 import com.daelim.witty.v2.web.controller.dto.users.VerificationCodeDTO;
 
@@ -43,4 +44,6 @@ public interface UserServiceV2 {
     void unlikeComment(Long commentId, User user) throws Exception;
     /* 팔로워 조회 */
     List<GetFollowerResponse> getFollower(String profileId, String loginId) throws Exception;
+    /* 팔로잉 조회 */
+    List<GetFollowingResponse> getFollowing(String profileId, String loginId) throws Exception;
 }

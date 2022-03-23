@@ -4,6 +4,7 @@ package com.daelim.witty.v2.web.service.users;
 import com.daelim.witty.v1.web.repository.comments.CommentRepository;
 import com.daelim.witty.v2.domain.*;
 import com.daelim.witty.v2.web.controller.dto.users.GetFollowerResponse;
+import com.daelim.witty.v2.web.controller.dto.users.GetFollowingResponse;
 import com.daelim.witty.v2.web.controller.dto.users.UserLogInDTO;
 import com.daelim.witty.v2.web.controller.dto.users.VerificationCodeDTO;
 import com.daelim.witty.v2.web.exception.BadRequestException;
@@ -110,6 +111,22 @@ public class UserServiceImplV2 implements UserServiceV2 {
 
         JpaResultMapper result = new JpaResultMapper();
         return result.list(query, GetFollowerResponse.class);
+    }
+
+    public List<GetFollowingResponse> getFollowing(String profileId, String loginId) throws Exception{
+        String sb = "SELECT u.user_id, u.email, u.department, " +
+                "if ((SELECT 1 FROM follow WHERE from_user_id = ? AND to_user_id = u.user_id), TRUE, FALSE) AS followState " +
+                "FROM user u, follow f " +
+                "WHERE u.user_id = f.to_user_id AND f.from_user_id = ?";
+
+        // 쿼리 완성
+        Query query = em.createNativeQuery(sb)
+                .setParameter(1, loginId)
+                .setParameter(2, profileId);
+
+        //JPA 쿼리 매핑 - DTO에 매핑
+        JpaResultMapper result = new JpaResultMapper();
+        return result.list(query, GetFollowingResponse.class);
     }
 
     @Transactional(rollbackFor = Exception.class)

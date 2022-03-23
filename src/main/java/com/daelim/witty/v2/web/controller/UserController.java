@@ -245,6 +245,11 @@ public class UserController {
         return new ResponseEntity<>(userService.getFollower(profileId, user.getId()), HttpStatus.OK);
     }
 
+    @GetMapping("/{profileId}/following")
+    public ResponseEntity<?> getFollowing(@PathVariable String profileId, @Login User user) throws Exception{
+        return new ResponseEntity<>(userService.getFollowing(profileId, user.getId()), HttpStatus.OK);
+    }
+
     // 위티 좋아요
     @PostMapping("/witty/like/{wittyId}")
     public ResponseEntity<Object> wittyLike(@PathVariable Long wittyId, @Login User user) throws Exception {
