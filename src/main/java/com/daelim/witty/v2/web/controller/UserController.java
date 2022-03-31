@@ -9,6 +9,7 @@ import com.daelim.witty.v2.web.controller.dto.users.*;
 
 import com.daelim.witty.v2.web.exception.BadRequestException;
 import com.daelim.witty.v2.web.exception.ForbbiddenException;
+import com.daelim.witty.v2.web.exception.UnAuthorizedException;
 import com.daelim.witty.v2.web.service.users.UserServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -45,14 +47,15 @@ public class UserController {
 
     // 회원가입
     @PostMapping
-    public ResponseEntity<Object> signUp(@RequestBody @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult) throws Exception {
+    public ResponseEntity<Object> signUp(@ModelAttribute @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult,
+                                         @RequestParam("profileImgUrl") MultipartFile file) throws Exception {
         // 입력값이 잘못 들어온 경우
         if (bindingResult.hasErrors()){
             showErrorLog("회원가입", bindingResult);
         }
 
         User user = User.createUserByDTO(userSignUpDTO);
-        user = userService.signUp(user);
+        user = userService.signUp(user, file);
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("result", "성공");
@@ -60,13 +63,45 @@ public class UserController {
         HashMap<String, Object> userResponse = new HashMap<>();
         userResponse.put("user_id", user.getId());
         userResponse.put("user_email", user.getEmail());
+        userResponse.put("user_introduction", user.getIntroduction());
         userResponse.put("user_department", user.getDepartment());
+        userResponse.put("profileImgUrl", user.getProfileImgUrl());
+
         response.put("user", userResponse);
 
         return ResponseEntity.ok()
                 .body(response);
     }
+    // 회원 정보 수정
+    @PatchMapping("/{userId}")
+    public ResponseEntity<Object> updateUserr(@ModelAttribute @Validated UpdateUserRequest updateUserRequest,
+                                              BindingResult bindingResult,
+                                              @RequestParam("profileImgUrl") MultipartFile file,
+                                              @PathVariable("userId") String userId,
+                                              @Login User user) throws Exception {
+        if (bindingResult.hasErrors()){
+            showErrorLog("회원정보 수정", bindingResult);
+        }
 
+        if (user == null) throw new UnAuthorizedException("로그인이 필요합니다");
+        if (!user.getId().equals(userId)) throw new ForbbiddenException("회원 정보는 본인만 수정 할 수 있습니다.");
+        User updateUser = userService.updateUser(updateUserRequest, file, user);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("result", "성공");
+
+        HashMap<String, Object> userResponse = new HashMap<>();
+        userResponse.put("user_id", updateUser.getId());
+        userResponse.put("user_email", updateUser.getEmail());
+        userResponse.put("user_introduction", updateUser.getIntroduction());
+        userResponse.put("user_department", updateUser.getDepartment());
+        userResponse.put("profileImgUrl", updateUser.getProfileImgUrl());
+
+        response.put("user", userResponse);
+
+        return ResponseEntity.ok()
+                .body(response);
+    }
     // 아이디중복확인
     @PostMapping("/id_check")
     public ResponseEntity<Object> id_check(@RequestBody @Validated UserIdCheckDTO userIdCheckDTO, BindingResult bindingResult) throws Exception{

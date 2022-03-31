@@ -3,10 +3,8 @@ package com.daelim.witty.v2.web.service.users;
 
 import com.daelim.witty.v2.domain.EmailVerification;
 import com.daelim.witty.v2.domain.User;
-import com.daelim.witty.v2.web.controller.dto.users.GetFollowerResponse;
-import com.daelim.witty.v2.web.controller.dto.users.GetFollowingResponse;
-import com.daelim.witty.v2.web.controller.dto.users.UserLogInDTO;
-import com.daelim.witty.v2.web.controller.dto.users.VerificationCodeDTO;
+import com.daelim.witty.v2.web.controller.dto.users.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,11 +12,13 @@ public interface UserServiceV2 {
     /**
      * 회원가입
      * */
-    User signUp(User user) throws Exception;
+    User signUp(User user, MultipartFile file) throws Exception;
     /**
      *  로그인
      * */
     User login(UserLogInDTO userLogInDTO) throws Exception;
+    /** 회원정보 수정 */
+    User updateUser(UpdateUserRequest updateUserRequest, MultipartFile file, User user) throws Exception;
     /** 아이디 중복 체크*/
     boolean isDuplicatedId(String id) throws Exception;
 

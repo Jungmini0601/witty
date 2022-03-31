@@ -6,11 +6,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
-public class UserSignUpDTO {
-
+public class UpdateUserRequest {
     @NotBlank
-    private String user_id;
-    @NotBlank @Pattern(regexp = ".+@email\\.daelim\\.ac\\.kr")
+    @Pattern(regexp = ".+@email\\.daelim\\.ac\\.kr")
     private String user_email;
     @NotBlank
     private String user_department;

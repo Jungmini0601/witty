@@ -1,5 +1,6 @@
 package com.daelim.witty.v2.domain;
 
+import com.daelim.witty.v2.web.controller.dto.users.UpdateUserRequest;
 import com.daelim.witty.v2.web.controller.dto.users.UserSignUpDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
@@ -21,9 +22,21 @@ public class User {
     private String id;
     private String email;
     private String department; // 학부
+    private String profileImgUrl;
+    private String introduction;
+
     @JsonIgnore
     private String password;
 
+    public void setProfileImgUrl(String profileImgUrl) {
+        this.profileImgUrl = profileImgUrl;
+    }
+
+    public void updateUser(UpdateUserRequest request) {
+        this.email = request.getUser_email();
+        this.department = request.getUser_department();
+        this.introduction = request.getIntroduction();
+    }
 
     public static User createUserByDTO(UserSignUpDTO userSignUpDTO) {
         User user = new User();
@@ -31,6 +44,7 @@ public class User {
         user.email = userSignUpDTO.getUser_email();
         user.department = userSignUpDTO.getUser_department();
         user.password = userSignUpDTO.getPassword();
+        user.introduction = userSignUpDTO.getIntroduction();
         return user;
     }
 }

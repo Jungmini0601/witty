@@ -32,9 +32,10 @@ public class CommentController {
     @GetMapping("/{wittyId}")
     public List<GetCommentResponse> find(@PathVariable Long wittyId,
                                          @RequestParam("page") Integer page,
-                                         @RequestParam("size") Integer size) throws Exception{
+                                         @RequestParam("size") Integer size,
+                                         @Login User user) throws Exception{
         List<Comment> comments = commentService.getCommentList(wittyId, page, size);
-        return comments.stream().map(GetCommentResponse::success).collect(Collectors.toList());
+        return comments.stream().map(comment -> GetCommentResponse.success(comment, user)).collect(Collectors.toList());
     }
 
     @PostMapping

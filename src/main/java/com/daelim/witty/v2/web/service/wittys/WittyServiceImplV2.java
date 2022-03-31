@@ -1,11 +1,13 @@
 package com.daelim.witty.v2.web.service.wittys;
 
+import com.daelim.witty.v2.domain.Follow;
 import com.daelim.witty.v2.domain.Tag;
 import com.daelim.witty.v2.domain.User;
 import com.daelim.witty.v2.domain.Witty;
 import com.daelim.witty.v2.web.controller.dto.wittys.CreateWittyRequest;
 import com.daelim.witty.v2.web.controller.dto.wittys.UpdateWittyRequest;
 import com.daelim.witty.v2.web.exception.BadRequestException;
+import com.daelim.witty.v2.web.repository.users.FollowRepository;
 import com.daelim.witty.v2.web.repository.wittys.TagRepository;
 import com.daelim.witty.v2.web.repository.wittys.WittyRepository;
 
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 public class WittyServiceImplV2 implements WittyServiceV2 {
     private final WittyRepository wittyRepository;
     private final TagRepository tagRepository;
+    private final FollowRepository followRepository;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -64,8 +67,18 @@ public class WittyServiceImplV2 implements WittyServiceV2 {
     }
 
     @Override
-    public List<Witty> findAll(Integer page, Integer size) throws Exception {
+    public List<Witty> findAll(Integer page, Integer size, User user) throws Exception {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdDateTime").descending());
-        return wittyRepository.findAll(pageRequest).getContent();
+        List<User> followingUsers = followRepository.findAllByFromUser(user).stream().map(Follow::getToUser)
+                .collect(Collectors.toList());
+
+        return wittyRepository.findWittyByFollowing(followingUsers, pageRequest);
+    }
+
+    @Override
+    public List<Witty> findAll(Integer page, Integer size, String tag) throws Exception {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdDateTime").descending());
+        List<Tag> tags = tagRepository.findAllByName(tag);
+        return wittyRepository.findAllByTagsIn(tags, pageRequest);
     }
 }

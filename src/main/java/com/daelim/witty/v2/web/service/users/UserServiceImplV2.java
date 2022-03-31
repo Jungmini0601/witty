@@ -3,10 +3,7 @@ package com.daelim.witty.v2.web.service.users;
 
 import com.daelim.witty.v1.web.repository.comments.CommentRepository;
 import com.daelim.witty.v2.domain.*;
-import com.daelim.witty.v2.web.controller.dto.users.GetFollowerResponse;
-import com.daelim.witty.v2.web.controller.dto.users.GetFollowingResponse;
-import com.daelim.witty.v2.web.controller.dto.users.UserLogInDTO;
-import com.daelim.witty.v2.web.controller.dto.users.VerificationCodeDTO;
+import com.daelim.witty.v2.web.controller.dto.users.*;
 import com.daelim.witty.v2.web.exception.BadRequestException;
 import com.daelim.witty.v2.web.repository.comments.CommentRepositoryV2;
 import com.daelim.witty.v2.web.repository.users.*;
@@ -14,13 +11,19 @@ import com.daelim.witty.v2.web.repository.wittys.WittyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.qlrm.mapper.JpaResultMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,13 +43,55 @@ public class UserServiceImplV2 implements UserServiceV2 {
     private final CommentLikeRepository commentLikeRepository;
     private final EntityManager em;
 
+    @Value("${profileImg.path}")
+    private String uploadFolder;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public User signUp(User user) throws Exception {
+    public User signUp(User user, MultipartFile file) throws Exception {
+        String imageFileName = user.getId() + "_" + file.getOriginalFilename();
+        Path imageFilePath = Paths.get(uploadFolder + imageFileName);
+
+        if (file.getSize() != 0) {
+            try {
+                if (user.getProfileImgUrl() != null) {
+                    File userFile = new File(uploadFolder + user.getProfileImgUrl());
+                    userFile.delete();
+                }
+                Files.write(imageFilePath, file.getBytes());
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        user.setProfileImgUrl(imageFileName);
         userRepository.save(user);
         return user;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public User updateUser(UpdateUserRequest updateUserRequest, MultipartFile file, User user) throws Exception {
+        User findUser = userRepository.findById(user.getId()).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+        String imageFileName = user.getId() + "_" + file.getOriginalFilename();
+        Path imageFilePath = Paths.get(uploadFolder + imageFileName);
+
+        if (file.getSize() != 0) {
+            try {
+                if (user.getProfileImgUrl() != null) {
+                    File userFile = new File(uploadFolder + user.getProfileImgUrl());
+                    userFile.delete();
+                }
+                Files.write(imageFilePath, file.getBytes());
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        user.setProfileImgUrl(imageFileName);
+        findUser.updateUser(updateUserRequest);
+        return findUser;
+    }
 
     @Override
     public User login(UserLogInDTO userLogInDTO) throws Exception {
@@ -100,7 +145,7 @@ public class UserServiceImplV2 implements UserServiceV2 {
     }
 
     public List<GetFollowerResponse> getFollower(String profileId, String loginId) throws Exception {
-        String sb = "SELECT u.user_id, u.email, u.department ," +
+        String sb = "SELECT u.user_id, u.email, u.department, u.profile_img_url, " +
                 "if ((SELECT 1 FROM follow WHERE from_user_id = ? AND to_user_id = u.user_id), TRUE, FALSE) AS followState " +
                 "FROM user u, follow f " +
                 "WHERE u.user_id = f.from_user_id AND f.to_user_id = ?";
@@ -114,7 +159,7 @@ public class UserServiceImplV2 implements UserServiceV2 {
     }
 
     public List<GetFollowingResponse> getFollowing(String profileId, String loginId) throws Exception{
-        String sb = "SELECT u.user_id, u.email, u.department, " +
+        String sb = "SELECT u.user_id, u.email, u.department, u.profile_img_url, " +
                 "if ((SELECT 1 FROM follow WHERE from_user_id = ? AND to_user_id = u.user_id), TRUE, FALSE) AS followState " +
                 "FROM user u, follow f " +
                 "WHERE u.user_id = f.to_user_id AND f.from_user_id = ?";

@@ -7,6 +7,8 @@ import com.daelim.witty.v2.web.argumentResolver.Login;
 import com.daelim.witty.v2.web.controller.dto.wittys.*;
 import com.daelim.witty.v2.web.exception.BadRequestException;
 import com.daelim.witty.v2.web.exception.ForbbiddenException;
+import com.daelim.witty.v2.web.exception.UnAuthorizedException;
+import com.daelim.witty.v2.web.service.users.UserServiceV2;
 import com.daelim.witty.v2.web.service.wittys.WittyServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +33,18 @@ public class WittyController {
     //TODO 조회 성능 최적화 필요 할 수도 있음.
     @GetMapping
     public List<GetWittyResponse> find(@RequestParam("page") Integer page, @RequestParam("size") Integer size, @Login User user) throws Exception{
-        List<Witty> witties = wittyService.findAll(page, size);
+        if (user == null) throw new UnAuthorizedException("로그인이 필요합니다");
+        List<Witty> witties = wittyService.findAll(page, size, user);
+        return witties.stream().map(witty -> GetWittyResponse.success(witty, user)).collect(Collectors.toList());
+    }
+
+    //TODO 개발중
+   @GetMapping("/byTag")
+    public List<GetWittyResponse> findWittyByTags(@RequestParam("page") Integer page, @RequestParam("size") Integer size,
+                                                  @RequestParam("tag") String tag,
+                                                  @Login User user) throws Exception{
+        if (user == null) throw new UnAuthorizedException("로그인이 필요합니다");
+        List<Witty> witties = wittyService.findAll(page, size, tag);
         return witties.stream().map(witty -> GetWittyResponse.success(witty, user)).collect(Collectors.toList());
     }
 

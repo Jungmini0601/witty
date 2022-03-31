@@ -19,6 +19,7 @@ public interface WittyServiceV2 {
 
     Witty deleteWitty(Long wittyId, User user) throws Exception;
 
-    List<Witty> findAll(Integer page, Integer size) throws Exception;
+    List<Witty> findAll(Integer page, Integer size, User user) throws Exception;
 
+    List<Witty> findAll(Integer page, Integer size, String tag) throws Exception;
 }

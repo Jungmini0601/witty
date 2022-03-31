@@ -13,14 +13,15 @@ public class GetCommentResponse {
     private String content;
     private LocalDateTime createdDateTime;
     private Integer likes;
-
-    public static GetCommentResponse success(Comment comment) {
+    private long likeStatus;
+    public static GetCommentResponse success(Comment comment, User loginUser) {
         GetCommentResponse response = new GetCommentResponse();
         response.id = comment.getId();
         response.user = comment.getUser();
         response.content = comment.getContent();
         response.createdDateTime = comment.getCreatedDateTime();
         response.likes = comment.getLikeList().size();
+        response.likeStatus = comment.getLikeList().stream().filter(like -> like.getUser().getId().equals(loginUser.getId())).count();
         return response;
     }
 }

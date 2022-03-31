@@ -9,12 +9,14 @@ public class GetFollowingResponse {
     private String id;
     private String email;
     private String department;
+    private String profileImgUrl;
     private BigInteger followState; // 1이면 follow 상태
 
-    public GetFollowingResponse(String id, String email, String department, BigInteger followState) {
+    public GetFollowingResponse(String id, String email, String department,String profileImgUrl, BigInteger followState) {
         this.id = id;
         this.email = email;
         this.department = department;
+        this.profileImgUrl = profileImgUrl;
         this.followState = followState;
     }
 }
