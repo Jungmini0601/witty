@@ -233,6 +233,8 @@ public class UserController {
         userResponse.put("user_id", user.getId());
         userResponse.put("user_email", user.getEmail());
         userResponse.put("user_department", user.getDepartment());
+        userResponse.put("introduction", user.getIntroduction());
+        userResponse.put("profile_imageUrl", user.getProfileImgUrl());
 
         response.put("user", userResponse);
 
