@@ -184,14 +184,16 @@ public class UserController {
         // 입력값이 통과 되었지만 맞지 않는 경우
         if(user == null
                 || !(user.getId().equals(userLogInDTO.getUser_id()) && user.getPassword().equals(userLogInDTO.getPassword()))) {
-            response.put("result", "아이디 비밀번호 확인 필요");
-            return ResponseEntity.badRequest().body(response);
+            throw new BadRequestException("아이디 비밀번호 확인 필요");
         }
 
         HashMap<String, String> userResponse = new HashMap<>();
         userResponse.put("user_id", user.getId());
         userResponse.put("user_email", user.getEmail());
         userResponse.put("user_department", user.getDepartment());
+        userResponse.put("user_introduction", user.getIntroduction());
+        userResponse.put("profileImgUrl", user.getProfileImgUrl());
+
 
         response.put("result", "성공");
         response.put("user", userResponse);
