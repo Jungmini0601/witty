@@ -37,7 +37,7 @@ public class Comment {
     private LocalDateTime createdDateTime;
 
     @JsonIgnoreProperties({"comment"})
-    @OneToMany(mappedBy = "comment")
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private List<CommentLike> likeList = new ArrayList<>();
 
     //연관 관계 메서드 생성

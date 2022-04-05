@@ -28,7 +28,7 @@ public class Witty {
     private User user;
 
     @JsonIgnoreProperties({"witty"})
-    @OneToMany(mappedBy = "witty")
+    @OneToMany(mappedBy = "witty", cascade = CascadeType.ALL)
     private List<WittyLike> likeList = new ArrayList<>();
 
     @JsonIgnoreProperties({"witty"})

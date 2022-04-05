@@ -45,6 +45,10 @@ public class UserController {
         throw new BadRequestException("입력값 확인 필요");
     }
 
+    // TODO 팔로워 카운트
+
+    // TODO 팔로잉 카운트
+
     // 회원가입
     @PostMapping
     public ResponseEntity<Object> signUp(@ModelAttribute @Validated UserSignUpDTO userSignUpDTO, BindingResult bindingResult,
@@ -52,6 +56,10 @@ public class UserController {
         // 입력값이 잘못 들어온 경우
         if (bindingResult.hasErrors()){
             showErrorLog("회원가입", bindingResult);
+        }
+
+        if(!file.isEmpty()) {
+            log.error("시발 파일 왜 없어");
         }
 
         User user = User.createUserByDTO(userSignUpDTO);

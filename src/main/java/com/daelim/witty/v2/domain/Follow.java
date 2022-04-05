@@ -16,11 +16,11 @@ public class Follow {
     private Long id;
 
     @JoinColumn(name = "from_user_id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User fromUser;
 
     @JoinColumn(name = "to_user_id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User toUser;
 
     public Follow(User toUser, User fromUser) {
