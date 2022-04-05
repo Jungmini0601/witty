@@ -46,8 +46,17 @@ public class UserController {
     }
 
     // TODO 팔로워 카운트
-
+    @GetMapping("/follower/count/{user_id}")
+    private ResponseEntity<Object> getFollowerCount(@PathVariable("user_id") String userId) throws Exception{
+        Long count = userService.getFollowerCount(userId);
+        return ResponseEntity.ok(count);
+    }
     // TODO 팔로잉 카운트
+    @GetMapping("/following/count/{user_id}")
+    private ResponseEntity<Object> getFollowingCount(@PathVariable("user_id") String userId) throws Exception{
+        Long count = userService.getFollowingCount(userId);
+        return ResponseEntity.ok(count);
+    }
 
     // 회원가입
     @PostMapping
@@ -56,10 +65,6 @@ public class UserController {
         // 입력값이 잘못 들어온 경우
         if (bindingResult.hasErrors()){
             showErrorLog("회원가입", bindingResult);
-        }
-
-        if(!file.isEmpty()) {
-            log.error("시발 파일 왜 없어");
         }
 
         User user = User.createUserByDTO(userSignUpDTO);

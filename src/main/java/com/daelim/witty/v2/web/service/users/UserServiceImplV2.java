@@ -111,6 +111,17 @@ public class UserServiceImplV2 implements UserServiceV2 {
         mailService.sendMail(emailVerification);
     }
 
+    @Override
+    public Long getFollowerCount(String userId) throws Exception {
+        User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+        return followRepository.countFollowByToUser(user);
+    }
+
+    @Override
+    public Long getFollowingCount(String userId) throws Exception {
+        User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+        return followRepository.countFollowByFromUser(user);
+    }
 
     @Override
     public boolean verification(VerificationCodeDTO verificationCodeDTO) throws Exception {

@@ -46,4 +46,8 @@ public interface UserServiceV2 {
     List<GetFollowerResponse> getFollower(String profileId, String loginId) throws Exception;
     /* 팔로잉 조회 */
     List<GetFollowingResponse> getFollowing(String profileId, String loginId) throws Exception;
+    /* 팔로워 count 조회 */
+    Long getFollowerCount(String userId) throws Exception;
+    /* 팔로잉 카운트 조회*/
+    Long getFollowingCount(String userId) throws Exception;
 }
