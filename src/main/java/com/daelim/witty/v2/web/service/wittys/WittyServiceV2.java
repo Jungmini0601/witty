@@ -22,4 +22,5 @@ public interface WittyServiceV2 {
     List<Witty> findAll(Integer page, Integer size, User user) throws Exception;
 
     List<Witty> findAll(Integer page, Integer size, String tag) throws Exception;
+
 }

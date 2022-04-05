@@ -45,13 +45,12 @@ public class UserController {
         throw new BadRequestException("입력값 확인 필요");
     }
 
-    // TODO 팔로워 카운트
     @GetMapping("/follower/count/{user_id}")
     private ResponseEntity<Object> getFollowerCount(@PathVariable("user_id") String userId) throws Exception{
         Long count = userService.getFollowerCount(userId);
         return ResponseEntity.ok(count);
     }
-    // TODO 팔로잉 카운트
+
     @GetMapping("/following/count/{user_id}")
     private ResponseEntity<Object> getFollowingCount(@PathVariable("user_id") String userId) throws Exception{
         Long count = userService.getFollowingCount(userId);

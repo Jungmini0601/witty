@@ -16,4 +16,6 @@ public interface WittyRepository extends JpaRepository<Witty, Long> {
     List<Witty> findWittyByFollowing(@Param("following") List<User> followings, Pageable pageable);
 
     List<Witty> findAllByTagsIn(List<Tag> tags, Pageable pageable);
+
+    List<Witty> findAllByUser(User user, Pageable pageable);
 }

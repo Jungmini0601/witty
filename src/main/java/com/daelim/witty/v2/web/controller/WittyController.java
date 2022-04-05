@@ -30,7 +30,6 @@ public class WittyController {
 
     private final WittyServiceV2 wittyService;
 
-    //TODO 조회 성능 최적화 필요 할 수도 있음.
     @GetMapping
     public List<GetWittyResponse> find(@RequestParam("page") Integer page, @RequestParam("size") Integer size, @Login User user) throws Exception{
         if (user == null) throw new UnAuthorizedException("로그인이 필요합니다");
@@ -38,7 +37,6 @@ public class WittyController {
         return witties.stream().map(witty -> GetWittyResponse.success(witty, user)).collect(Collectors.toList());
     }
 
-    //TODO 개발중
    @GetMapping("/byTag")
     public List<GetWittyResponse> findWittyByTags(@RequestParam("page") Integer page, @RequestParam("size") Integer size,
                                                   @RequestParam("tag") String tag,
