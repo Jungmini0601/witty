@@ -30,11 +30,9 @@ public class CommentServiceImplV2 implements CommentServiceV2 {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Comment save(CreateCommentRequest createCommentRequest, User user) throws Exception {
-        Optional<Witty> wittyOptional = wittyRepository.findById(createCommentRequest.getWittyId());
+        Witty witty = wittyRepository.findById(createCommentRequest.getWittyId())
+                .orElseThrow(() -> new BadRequestException("입력값을 확인 해 주세요"));
 
-        if (wittyOptional.isEmpty()) throw new BadRequestException("입력값을 확인 해 주세요");
-
-        Witty witty = wittyOptional.get();
         Comment comment = Comment.createComment(createCommentRequest, witty, user);
         return commentRepository.save(comment);
     }
@@ -42,11 +40,8 @@ public class CommentServiceImplV2 implements CommentServiceV2 {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Comment update(Long id, UpdateCommentRequest updateCommentRequest, User user) throws Exception {
-        Optional<Comment> commentOptional = commentRepository.findById(id);
-
-        if(commentOptional.isEmpty()) throw new BadRequestException("입력값을 확인 해 주세요");
-
-        Comment comment = commentOptional.get();
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("입력값을 확인 해 주세요"));
 
         if(!comment.getUser().getId().equals(user.getId())) throw new ForbbiddenException("작성자만 수정 할 수 있습니다.");
 
@@ -57,9 +52,9 @@ public class CommentServiceImplV2 implements CommentServiceV2 {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Comment delete(Long id, User user) throws Exception {
-        Optional<Comment> commentOptional = commentRepository.findById(id);
-        if(commentOptional.isEmpty()) throw new BadRequestException("입력값을 확인 해 주세요");
-        Comment comment = commentOptional.get();
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("입력값을 확인 해 주세요"));
+
         commentRepository.delete(comment);
         return comment;
     }

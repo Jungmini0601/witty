@@ -40,8 +40,6 @@ public class WittyServiceImplV2 implements WittyServiceV2 {
         return wittyRepository.save(witty);
     }
 
-
-    //TODO 성능이슈있어서 나중에 해결 해야함.
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Witty updateWitty(Long wittyId, UpdateWittyRequest updateWittyRequest, User user) throws Exception {
