@@ -69,8 +69,7 @@ public class WittyServiceImplV2 implements WittyServiceV2 {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdDateTime").descending());
         List<User> followingUsers = followRepository.findAllByFromUser(user).stream().map(Follow::getToUser)
                 .collect(Collectors.toList());
-
-        return wittyRepository.findWittyByFollowing(followingUsers, pageRequest);
+        return wittyRepository.findWittyByUserIn(followingUsers, pageRequest);
     }
 
     @Override
