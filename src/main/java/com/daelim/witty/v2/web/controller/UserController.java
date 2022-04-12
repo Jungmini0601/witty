@@ -68,6 +68,7 @@ public class UserController {
 
         User user = User.createUserByDTO(userSignUpDTO);
         user = userService.signUp(user, file);
+        userService.addFollow(user.getId(), user.getId());
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("result", "성공");
