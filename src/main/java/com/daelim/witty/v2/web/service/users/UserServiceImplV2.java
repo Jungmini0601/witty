@@ -49,22 +49,7 @@ public class UserServiceImplV2 implements UserServiceV2 {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public User signUp(User user, MultipartFile file) throws Exception {
-        String imageFileName = user.getId() + "_" + file.getOriginalFilename();
-        Path imageFilePath = Paths.get(uploadFolder + imageFileName);
-
-        if (file.getSize() != 0) {
-            try {
-                if (user.getProfileImgUrl() != null) {
-                    File userFile = new File(uploadFolder + user.getProfileImgUrl());
-                    userFile.delete();
-                }
-                Files.write(imageFilePath, file.getBytes());
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        user.setProfileImgUrl(imageFileName);
+        setProfileImg(user, file);
         userRepository.save(user);
         return user;
     }
@@ -73,6 +58,12 @@ public class UserServiceImplV2 implements UserServiceV2 {
     @Override
     public User updateUser(UpdateUserRequest updateUserRequest, MultipartFile file, User user) throws Exception {
         User findUser = userRepository.findById(user.getId()).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+        setProfileImg(user, file);
+        findUser.updateUser(updateUserRequest);
+        return findUser;
+    }
+
+    private void setProfileImg(User user, MultipartFile file) {
         String imageFileName = user.getId() + "_" + file.getOriginalFilename();
         Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 
@@ -83,14 +74,12 @@ public class UserServiceImplV2 implements UserServiceV2 {
                     userFile.delete();
                 }
                 Files.write(imageFilePath, file.getBytes());
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         user.setProfileImgUrl(imageFileName);
-        findUser.updateUser(updateUserRequest);
-        return findUser;
     }
 
     @Override

@@ -15,8 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +50,8 @@ public class WittyController {
 
     //위티 생성
     @PostMapping
-    public ResponseEntity<Object> createWitty(@RequestBody @Validated CreateWittyRequest createWittyRequest, BindingResult bindingResult,
+    public ResponseEntity<Object> createWitty(@ModelAttribute @Validated CreateWittyRequest createWittyRequest, BindingResult bindingResult,
+                                              @RequestParam("thumbnailImgUri") MultipartFile file,
                                               @Login User user) throws Exception{
         if(user == null) {
             throw new ForbbiddenException("로그인이 필요합니다!");
@@ -58,7 +61,8 @@ public class WittyController {
             throw new BadRequestException("입력값 확인 필요");
         }
 
-        Witty witty = wittyService.writeWitty(createWittyRequest, user);
+        //TODO 응답스펙 바꿔야 함
+        Witty witty = wittyService.writeWitty(createWittyRequest, user, file);
         CreateWittyResponse wittyResponse = CreateWittyResponse.success(witty);
         HashMap<String, Object> response = new HashMap<>();
         response.put("result", "성공");
@@ -70,7 +74,9 @@ public class WittyController {
     // 위티 수정
     @PatchMapping("/{wittyId}")
     public ResponseEntity<Object> updateWitty(@PathVariable Long wittyId, @Login User user,
-                                              @RequestBody @Validated UpdateWittyRequest updateWittyRequest, BindingResult bindingResult) throws Exception{
+                                              @ModelAttribute @Validated UpdateWittyRequest updateWittyRequest,
+                                              BindingResult bindingResult,
+                                              @RequestParam("thumbnailImgUri") MultipartFile file) throws Exception{
 
         if(user == null) {
             throw new ForbbiddenException("로그인이 필요합니다!");
@@ -80,7 +86,7 @@ public class WittyController {
             throw new BadRequestException("입력값 확인 필요");
         }
 
-        Witty witty = wittyService.updateWitty(wittyId, updateWittyRequest, user);
+        Witty witty = wittyService.updateWitty(wittyId, updateWittyRequest, user, file);
         UpdateWittyResponse updateWittyResponse = UpdateWittyResponse.success(witty);
         HashMap<String, Object> response = new HashMap<>();
         response.put("result", "성공");

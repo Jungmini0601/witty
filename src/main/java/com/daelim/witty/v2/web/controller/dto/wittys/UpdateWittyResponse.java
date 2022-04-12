@@ -17,7 +17,7 @@ public class UpdateWittyResponse {
     private User user;
     private String content;
     private List<Tag> tags = new ArrayList<>();
-
+    private String thumnailImgUri;
     public static UpdateWittyResponse success(Witty witty) {
         UpdateWittyResponse response = new UpdateWittyResponse();
         response.id = witty.getId();
@@ -25,6 +25,7 @@ public class UpdateWittyResponse {
         response.user = witty.getUser();
         response.content = witty.getContent();
         response.tags = witty.getTags();
+        response.thumnailImgUri = witty.getThumnailImgUri();
         return response;
     }
 }

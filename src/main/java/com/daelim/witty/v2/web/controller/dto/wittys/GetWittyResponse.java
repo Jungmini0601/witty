@@ -20,6 +20,7 @@ public class GetWittyResponse {
     private List<Tag> tags = new ArrayList<>();
     private Integer likes;
     private int likeStatus;
+    private String thumnailImgUri;
 
     public static GetWittyResponse success(Witty witty, User loginUser) {
         GetWittyResponse response = new GetWittyResponse();
@@ -31,6 +32,7 @@ public class GetWittyResponse {
         response.likes = witty.getLikeList().size();
         response.likeStatus = (int) witty.getLikeList().stream()
                 .filter(like -> like.getUser().getId().equals(loginUser.getId())).count();
+        response.thumnailImgUri = witty.getThumnailImgUri();
         return response;
     }
 }

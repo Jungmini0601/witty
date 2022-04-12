@@ -17,7 +17,7 @@ public class DeleteWittyResponse {
     private User user;
     private String content;
     private List<Tag> tags = new ArrayList<>();
-
+    private String thumnailImgUri;
     public static DeleteWittyResponse success(Witty witty) {
         DeleteWittyResponse response = new DeleteWittyResponse();
         response.id = witty.getId();
@@ -25,6 +25,7 @@ public class DeleteWittyResponse {
         response.user = witty.getUser();
         response.content = witty.getContent();
         response.tags = witty.getTags();
+        response.thumnailImgUri = witty.getThumnailImgUri();
         return response;
     }
 }

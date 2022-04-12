@@ -9,13 +9,14 @@ import com.daelim.witty.v2.web.controller.dto.wittys.CreateWittyRequest;
 import com.daelim.witty.v2.web.controller.dto.wittys.UpdateWittyRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface WittyServiceV2 {
-    Witty writeWitty(CreateWittyRequest createWittyRequest, User user) throws Exception;
+    Witty writeWitty(CreateWittyRequest createWittyRequest, User user, MultipartFile file) throws Exception;
 
-    Witty updateWitty(Long wittyId, UpdateWittyRequest updateWittyRequest, User user) throws Exception;
+    Witty updateWitty(Long wittyId, UpdateWittyRequest updateWittyRequest, User user, MultipartFile file) throws Exception;
 
     Witty deleteWitty(Long wittyId, User user) throws Exception;
 

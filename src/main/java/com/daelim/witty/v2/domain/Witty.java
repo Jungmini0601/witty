@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,6 +36,8 @@ public class Witty {
     @OneToMany(mappedBy = "witty", cascade = CascadeType.ALL) // 글이 지워지면 댓글을 다 지워준다.
     private List<Comment> comments = new ArrayList<>();
 
+    private String thumnailImgUri;
+
     private String content;
 
     // TODO Witty - Tag 관계 1 : N으로 할 지 N : M으로 할지 결정 해야 함.
@@ -42,6 +45,10 @@ public class Witty {
     private List<Tag> tags = new ArrayList<>();
 
     private LocalDateTime createdDateTime;
+
+    public void setThumnailImgUri(String thumnailImgUri) {
+        this.thumnailImgUri = thumnailImgUri;
+    }
 
     // 생성 메서드
     public static Witty createWitty(User user, CreateWittyRequest createWittyRequest) {
