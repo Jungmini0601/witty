@@ -130,6 +130,8 @@ public class UserServiceImplV2 implements UserServiceV2 {
         User toUser = userRepository.findById(toUserName).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
 
         Follow follow = new Follow(toUser, fromUser);
+        followRepository.findByFromUserAndToUser(fromUser, toUser)
+                .ifPresent(obj -> { throw new BadRequestException("입력값 확인 필요");});
         followRepository.save(follow);
     }
 
