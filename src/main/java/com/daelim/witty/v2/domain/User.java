@@ -34,7 +34,6 @@ public class User {
 
     public void updateUser(UpdateUserRequest request) {
         this.email = request.getUser_email();
-        this.department = request.getUser_department();
         this.introduction = request.getIntroduction();
     }
 

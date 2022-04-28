@@ -11,8 +11,6 @@ public class UpdateUserRequest {
     @Pattern(regexp = ".+@email\\.daelim\\.ac\\.kr")
     private String user_email;
     @NotBlank
-    private String user_department;
-    @NotBlank
     private String password;
     @NotBlank
     private String introduction;

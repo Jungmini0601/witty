@@ -13,6 +13,11 @@ import com.daelim.witty.v2.web.service.wittys.WittyServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -20,6 +25,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,12 +39,45 @@ import java.util.stream.Collectors;
 public class WittyController {
 
     private final WittyServiceV2 wittyService;
+    @Value("${wittyThumbnail.path}")
+    private String thumbnailUploadFolder;
 
     @GetMapping
     public List<GetWittyResponse> find(@RequestParam("page") Integer page, @RequestParam("size") Integer size, @Login User user) throws Exception{
         if (user == null) throw new UnAuthorizedException("로그인이 필요합니다");
         List<Witty> witties = wittyService.findAll(page, size, user);
         return witties.stream().map(witty -> GetWittyResponse.success(witty, user)).collect(Collectors.toList());
+    }
+
+    @GetMapping(value = "image/{imagename}")
+    public ResponseEntity<Resource> showUserImage(@PathVariable("imagename") String imageName) {
+        // 사진이 저장된 폴더 경로 변수 선언
+        String imageRoot = thumbnailUploadFolder;
+
+        // 서버 로컬 경로 + 파일 명 저장 실시
+        imageRoot = imageRoot + imageName;
+
+        // Resorce를 사용해서 로컬 서버에 저장된 이미지 경로 및 파일 명을 지정
+        Resource resource = new FileSystemResource(imageRoot);
+
+        // 로컬 서버에 저장된 이미지 파일이 없을 경우
+        if(!resource.exists()){
+            return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND); // 리턴 결과 반환 404
+        }
+
+        // 로컬 서버에 저장된 이미지가 있는 경우 로직 처리
+        HttpHeaders header = new HttpHeaders();
+        Path filePath = null;
+        try {
+            filePath = Paths.get(imageRoot);
+            // 인풋으로 들어온 파일명 .png / .jpg 에 맞게 헤더 타입 설정
+            header.add("Content-Type", Files.probeContentType(filePath));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
     }
 
    @GetMapping("/byTag")

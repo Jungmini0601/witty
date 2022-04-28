@@ -13,7 +13,12 @@ import com.daelim.witty.v2.web.exception.UnAuthorizedException;
 import com.daelim.witty.v2.web.service.users.UserServiceV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -23,6 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,7 +41,8 @@ import java.util.List;
 public class UserController {
 
     private final UserServiceV2 userService;
-
+    @Value("${profileImg.path}")
+    private String profileUploadFolder;
     //에러 로그
     private void showErrorLog(String methodName, BindingResult bindingResult) throws BadRequestException {
         List<ObjectError> errorList = bindingResult.getAllErrors();
@@ -55,6 +64,37 @@ public class UserController {
     private ResponseEntity<Object> getFollowingCount(@PathVariable("user_id") String userId) throws Exception{
         Long count = userService.getFollowingCount(userId);
         return ResponseEntity.ok(count);
+    }
+
+    @GetMapping(value = "image/{imagename}")
+    public ResponseEntity<Resource> showUserImage(@PathVariable("imagename") String imageName) {
+        // 사진이 저장된 폴더 경로 변수 선언
+        String imageRoot = profileUploadFolder;
+
+        // 서버 로컬 경로 + 파일 명 저장 실시
+        imageRoot = imageRoot + imageName;
+
+        // Resorce를 사용해서 로컬 서버에 저장된 이미지 경로 및 파일 명을 지정
+        Resource resource = new FileSystemResource(imageRoot);
+
+        // 로컬 서버에 저장된 이미지 파일이 없을 경우
+        if(!resource.exists()){
+            return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND); // 리턴 결과 반환 404
+        }
+
+        // 로컬 서버에 저장된 이미지가 있는 경우 로직 처리
+        HttpHeaders header = new HttpHeaders();
+        Path filePath = null;
+        try {
+            filePath = Paths.get(imageRoot);
+            // 인풋으로 들어온 파일명 .png / .jpg 에 맞게 헤더 타입 설정
+            header.add("Content-Type", Files.probeContentType(filePath));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
     }
 
     // 회원가입
