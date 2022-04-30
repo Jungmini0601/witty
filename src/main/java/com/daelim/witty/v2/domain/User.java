@@ -33,8 +33,8 @@ public class User {
     }
 
     public void updateUser(UpdateUserRequest request) {
-        this.email = request.getUser_email();
         this.introduction = request.getIntroduction();
+        this.password = request.getPassword();
     }
 
     public static User createUserByDTO(UserSignUpDTO userSignUpDTO) {

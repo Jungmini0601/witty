@@ -8,9 +8,6 @@ import javax.validation.constraints.Pattern;
 @Data
 public class UpdateUserRequest {
     @NotBlank
-    @Pattern(regexp = ".+@email\\.daelim\\.ac\\.kr")
-    private String user_email;
-    @NotBlank
     private String password;
     @NotBlank
     private String introduction;

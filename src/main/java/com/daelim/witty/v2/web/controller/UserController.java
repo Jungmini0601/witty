@@ -127,7 +127,7 @@ public class UserController {
     }
     // 회원 정보 수정
     @PatchMapping("/{userId}")
-    public ResponseEntity<Object> updateUserr(@ModelAttribute @Validated UpdateUserRequest updateUserRequest,
+    public ResponseEntity<Object> updateUser(@ModelAttribute @Validated UpdateUserRequest updateUserRequest,
                                               BindingResult bindingResult,
                                               @RequestParam("profileImgUrl") MultipartFile file,
                                               @PathVariable("userId") String userId,
