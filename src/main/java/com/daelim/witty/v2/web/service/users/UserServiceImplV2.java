@@ -58,7 +58,7 @@ public class UserServiceImplV2 implements UserServiceV2 {
     @Override
     public User updateUser(UpdateUserRequest updateUserRequest, MultipartFile file, User user) throws Exception {
         User findUser = userRepository.findById(user.getId()).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
-        setProfileImg(user, file);
+        setProfileImg(findUser, file);
         findUser.updateUser(updateUserRequest);
         return findUser;
     }

@@ -58,6 +58,7 @@ public class WittyServiceImplV2 implements WittyServiceV2 {
     @Override
     public Witty updateWitty(Long wittyId, UpdateWittyRequest updateWittyRequest, User user, MultipartFile file) throws Exception {
         Witty witty = wittyRepository.findById(wittyId).orElseThrow(() -> new BadRequestException("입력값 확인 필요"));
+        tagRepository.deleteAllByWitty(witty);
         witty.update(updateWittyRequest);
         setThumnailImg(user, file, witty);
         return witty;

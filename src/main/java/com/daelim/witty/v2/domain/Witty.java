@@ -75,6 +75,7 @@ public class Witty {
             updateTags.add(tag);
             tag.setWitty(this);
         }
+        this.tags.clear();
         this.tags = updateTags;
     }
 }
